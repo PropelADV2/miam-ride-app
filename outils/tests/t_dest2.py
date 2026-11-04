@@ -1,6 +1,6 @@
 import json
 from playwright.sync_api import sync_playwright
-src=open('t_dest.py').read().split("with sync_playwright()")[0].replace("F='Miam ride osm - vers 14.html'","F='Miam ride osm - vers 17.html'").replace("vers 15.html","vers 17.html")
+src=open('t_dest.py').read().split("with sync_playwright()")[0].replace("F='Miam ride osm - vers 14.html'","F='Miam ride osm - vers 18.html'").replace("vers 15.html","vers 18.html")
 exec(src)
 def setup(p,fail=False):
     b=p.chromium.launch(args=['--no-sandbox']);pg=b.new_page(viewport={'width':400,'height':860});errs=[];pg.on('pageerror',lambda e:errs.append(str(e)))
