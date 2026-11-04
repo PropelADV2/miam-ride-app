@@ -1,6 +1,6 @@
 import json,math,sys
 from playwright.sync_api import sync_playwright
-F='Miam ride osm - vers 13.html'
+F='Miam ride osm - vers 14.html'
 def hav(a,b):
     R=6371;p=math.pi/180;dl=(b[1]-a[1])*p;dg=(b[0]-a[0])*p
     x=math.sin(dl/2)**2+math.cos(a[1]*p)*math.cos(b[1]*p)*math.sin(dg/2)**2;return 2*R*math.asin(math.sqrt(x))
