@@ -1,0 +1,94 @@
+<title>Feuille de route Miam Ride</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap">
+<style>
+/* Mise en page : en-tête avec avancement, filtres par catégorie, tableau des points à traiter un par un. */
+:root{--bg:#FFF6E8;--card:#fff;--ink:#141414;--muted:#6b6258;--line:#141414;--yellow:#FFD21F;--soft:#FFF0DD;--ok:#2f8f4e;--doing:#d98200;
+--font:Poppins,system-ui,sans-serif}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#17140f;--card:#221e17;--ink:#f6efe3;--muted:#b3a794;--line:#f6efe3;--yellow:#FFD21F;--soft:#2c261c;--ok:#5cc883;--doing:#f0a63a;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#17140f;--card:#221e17;--ink:#f6efe3;--muted:#b3a794;--line:#f6efe3;--yellow:#FFD21F;--soft:#2c261c;--ok:#5cc883;--doing:#f0a63a;color-scheme:dark}
+body{background:var(--bg);color:var(--ink);font:400 14px/1.5 var(--font);padding-block:20px 40px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:980px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
+h1{font:800 26px/1.15 var(--font);margin:0;text-wrap:balance}
+.sub{color:var(--muted);margin:4px 0 0}
+.prog{display:flex;align-items:center;gap:12px;background:var(--card);border:2px solid var(--line);border-radius:16px;padding:12px 14px}
+.bar{flex:1;height:12px;border:2px solid var(--line);border-radius:99px;overflow:hidden;background:var(--soft)}
+.bar i{display:block;height:100%;background:var(--yellow);width:0;transition:width .3s}
+.prog b{font-variant-numeric:tabular-nums;white-space:nowrap}
+.filters{display:flex;flex-wrap:wrap;gap:6px}
+.filters button{font:600 12px var(--font);border:2px solid var(--line);background:var(--card);color:var(--ink);border-radius:99px;padding:5px 12px;cursor:pointer}
+.filters button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.tw{overflow-x:auto;border:2px solid var(--line);border-radius:16px;background:var(--card)}
+table{border-collapse:collapse;width:100%;min-width:760px}
+th{font:600 11px var(--font);text-transform:uppercase;letter-spacing:.06em;color:var(--muted);text-align:left;padding:10px 12px;border-bottom:2px solid var(--line);background:var(--soft)}
+td{padding:10px 12px;border-bottom:1px solid color-mix(in srgb,var(--line) 18%,transparent);vertical-align:top}
+tr:last-child td{border-bottom:0}
+td.n{color:var(--muted);font-variant-numeric:tabular-nums;width:34px}
+td b{display:block;font-weight:600}
+td small{display:block;color:var(--muted);margin-top:2px;max-width:46ch}
+.pill{display:inline-block;font:600 11px var(--font);border:2px solid var(--line);border-radius:99px;padding:1px 9px;white-space:nowrap}
+.p-Haute{background:var(--yellow);color:#141414}
+.cat{color:var(--muted);font-size:12px;white-space:nowrap}
+select{font:600 12px var(--font);color:var(--ink);background:var(--card);border:2px solid var(--line);border-radius:99px;padding:5px 8px;cursor:pointer}
+tr[data-s="done"] td:not(.st){opacity:.5}tr[data-s="done"] td b{text-decoration:line-through}
+tr[data-s="doing"] select{border-color:var(--doing);color:var(--doing)}
+tr[data-s="done"] select{border-color:var(--ok);color:var(--ok)}
+.note{font-size:12px;color:var(--muted)}
+:focus-visible{outline:3px solid var(--yellow);outline-offset:2px}
+</style>
+<div class="wrap">
+ <header><h1>Feuille de route Miam Ride</h1><p class="sub">Les points à traiter un par un. Change le statut dans la dernière colonne : il est enregistré.</p></header>
+ <div class="prog"><div class="bar" aria-hidden="true"><i id="bar"></i></div><b id="cnt">0 / 0 faits</b></div>
+ <div class="filters" id="flt" role="group" aria-label="Filtrer par catégorie"></div>
+ <div class="tw"><table><thead><tr><th>#</th><th>Point</th><th>Catégorie</th><th>Priorité</th><th>Effort</th><th>Statut</th></tr></thead><tbody id="tb"></tbody></table></div>
+ <p class="note" id="nt"></p>
+</div>
+<script>
+const ITEMS=[
+["conn","Création de compte et connexion (maquette)","Appli cycliste","Haute","Moyen","Écrans de création de compte et de connexion en démo, avec mode invité."],
+["auth","Vraie authentification (Supabase)","Fond du projet","Haute","Moyen","À faire en fin de projet, quand la structure des données est stable : e-mail + mot de passe, puis Google et Apple. Données synchronisées entre appareils."],
+["xp","Lier l'historique à l'XP et aux défis","Appli cycliste","Haute","Moyen","Une sortie enregistrée doit faire monter l'XP, les défis et le garage de vélos."],
+["live","Mode « sortie en cours »","Appli cycliste","Haute","Moyen","Prochaine pause, distance restante, validation du passage par scan QR."],
+["rate","Notation des produits après passage","Appli cycliste","Haute","Moyen","Fenêtre « Tu as pris quoi ? » après la validation QR : produit + note de 1 à 5, +5 XP. Maquette faite, règles dans le projet."],
+["abuse","Anti-abus et modération des avis","Fond du projet","Haute","Moyen","Fait en maquette : un avis par jour, seuils, plafond d'XP mensuel, réponse et signalement côté boulangerie, règles réglables au même endroit. Reste pour la version serveur : file de modération, masquage automatique, anonymisation réelle, contrôle de cohérence."],
+["map","Carte des boulangeries partenaires (maquette)","Appli cycliste","Moyenne","Moyen","Onglet Carte : pastilles d'avantages, regroupement au dézoom, filtres, fiche, « Passer par ici »."],
+["gplaces","Intégration Google Maps et Google Places","Fond du projet","Haute","Gros","Vraie carte Google, vraies boulangeries, photos des clients. Code branché (carte, lieux, notes, horaires, routage) derrière un seul réglage ; testé seulement avec des réponses Google simulées. Reste : clé API, facturation, appels via notre serveur, puis vraies simulations Versailles / Chevreuse."],
+["share","Partage de sorties","Appli cycliste","Basse","Petit","Carte récapitulative à envoyer à des amis."],
+["notif","Notifications","Appli cycliste","Basse","Moyen","Rappels de récompense proche et de fin de défi."],
+["mamie","Mode Mamie : ajouter les deux boutons","Appli cycliste","Moyenne","Petit","Partage et « Lancer le trajet » comme dans les autres modes."],
+["small","Petits écrans : carte écrasée par le panneau","Appli cycliste","Moyenne","Petit","Réduire le panneau après le choix des pauses."],
+["stats","Statistiques de la boulangerie","Espace boulangerie","Moyenne","Moyen","Onglet Stats (maquette) : passages, cyclistes fidèles, récompenses, jours et heures actifs, nouveaux et revenus, produits cités, estimation de ce que l'appli apporte, export CSV."],
+["vitrine","Photos de la vitrine : gérées en interne","Espace boulangerie","Moyenne","Petit","Décision : l'espace boulangerie reste simple, sans envoi de photos. L'équipe Miam Ride collecte les photos et met à jour les produits elle-même. Pas de collecte de photos Google ou Instagram."],
+["backoffice","Outil interne : traiter les photos et mettre à jour les produits","Fond du projet","Moyenne","Gros","Écran réservé à l'équipe : photos reçues, reconnaissance d'images et de texte proposée, vérification, mise à jour des produits de la boulangerie, notification. À construire avec le serveur."],
+["hours","Horaires, fermetures et temps de roulage","Appli cycliste","Moyenne","Moyen","Fait en maquette côté cycliste : départ choisi, heure de passage calculée (vitesse, pauses), boulangerie jugée à l'heure du passage (ouverte, à vérifier, fermée). Décision : pas d'éditeur d'horaires dans l'espace boulangerie, les horaires viendront de Google Places. Reste : brancher Google, vitesse personnalisée, signalement « fermé »."],
+["signup","Inscription du commerce","Espace boulangerie","Moyenne","Moyen","Formulaire pour devenir partenaire et parcours de validation."],
+["route","Vrai moteur de routage (Google Routes API, mode vélo)","Fond du projet","Haute","Gros","Décision : rester sur Google. Zone : Versailles et vallée de Chevreuse. Les options d'évitement de Google se limitent à péages, autoroutes, ferries et intérieurs (documentation) : le critère « routes calmes » et la génération de boucles seront à notre charge (points de passage choisis par nous). Code écrit (boucle par points de passage, tracé final avec les pauses), testé avec des réponses simulées. À valider par de vraies simulations dès qu'une clé API est disponible."],
+["dev","Envoi réel vers Garmin, Wahoo, etc.","Fond du projet","Basse","Gros","Dépend des partenariats. Le fichier GPX est réalisable avant."],
+["biz","Modèle économique : abonnement boulangerie","Fond du projet","Haute","Petit","Decision prise : les boulangeries paient pour être référencées, l'appli reste gratuite pour les cyclistes. Abonnement utilisateur reporté."],
+["price","Étude de marché : prix de l'abonnement boulangerie","Fond du projet","Haute","Moyen","Entretiens avec des boulangers, comparaison des offres, test de prix pendant la phase pilote. Besoin de la région visée."],
+["legal","Données personnelles et conditions d'utilisation","Fond du projet","Moyenne","Moyen","À prévoir avant un vrai lancement."],
+["sync","Synchro automatique des sorties (montre/GPS)","Appli cycliste","Haute","Gros","Récupérer la sortie depuis Garmin, Wahoo, Strava…, la comparer au tracé (≥ 80 %), valider, donner l'XP. Spec dans le projet. Demandes de partenariat à faire plus tard."],
+["partner","Demandes de partenariat (Garmin, Wahoo, Strava, Coros, Suunto, Polar)","Fond du projet","Haute","Moyen","À lancer plus tard. Délais non garantis : à anticiper avant le lancement."],
+["strava","Connexion par compte Strava (identifiant)","Fond du projet","Basse","Moyen","Piste pour plus tard : limite de comptes, approbation Strava, pas d'e-mail fourni."],
+["img","Images des 50 vélos","Contenu","Basse","Moyen","À fournir : NN-marque-modele.webp, 600×360, fond transparent."]
+];
+const LAB={todo:"À faire",doing:"En cours",done:"Fait"};
+const state={};let db=null,cat="Tout";
+const $=s=>document.querySelector(s);
+const cats=["Tout",...new Set(ITEMS.map(i=>i[2]))];
+function render(){
+ $("#flt").innerHTML=cats.map(c=>`<button type="button" aria-pressed="${c===cat}" data-c="${c}">${c}</button>`).join("");
+ $("#flt").querySelectorAll("button").forEach(b=>b.onclick=()=>{cat=b.dataset.c;render()});
+ $("#tb").innerHTML=ITEMS.map((it,k)=>[k,it]).filter(([k,it])=>cat==="Tout"||it[2]===cat).map(([k,it])=>{const s=state[it[0]]||"todo";
+  return `<tr data-s="${s}"><td class="n">${k+1}</td><td><b>${it[1]}</b><small>${it[5]}</small></td><td class="cat">${it[2]}</td><td><span class="pill p-${it[3]}">${it[3]}</span></td><td>${it[4]}</td><td class="st"><select data-id="${it[0]}" aria-label="Statut : ${it[1]}">${Object.entries(LAB).map(([v,l])=>`<option value="${v}"${v===s?" selected":""}>${l}</option>`).join("")}</select></td></tr>`}).join("");
+ $("#tb").querySelectorAll("select").forEach(el=>el.onchange=()=>setS(el.dataset.id,el.value));
+ const d=ITEMS.filter(i=>state[i[0]]==="done").length;
+ $("#cnt").textContent=`${d} / ${ITEMS.length} faits`;$("#bar").style.width=(100*d/ITEMS.length)+"%";
+}
+async function setS(id,v){state[id]=v;render();
+ if(db){try{await db.doc("roadmap/"+id).set({s:v})}catch(e){$("#nt").textContent="Enregistrement impossible pour le moment : le statut reste valable jusqu'à la fermeture de la page."}}}
+render();
+(async()=>{try{db=await window.claude.use("db")}catch(e){db=null}
+ if(!db){$("#nt").textContent="Les statuts ne sont pas enregistrés dans cette vue.";return}
+ db.collection("roadmap").onSnapshot(snap=>{snap.docs.forEach(d=>{const x=d.data();if(x&&x.s)state[d.id]=x.s});render()},()=>{$("#nt").textContent="Lecture des statuts impossible pour le moment."})})();
+</script>

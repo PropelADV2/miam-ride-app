@@ -1,0 +1,17 @@
+from playwright.sync_api import sync_playwright
+with sync_playwright() as pw:
+    b=pw.chromium.launch(args=['--no-sandbox']);pg=b.new_page(viewport={'width':390,'height':844})
+    errs=[];pg.on('pageerror',lambda e:errs.append(str(e)))
+    pg.goto('file:///mnt/user-data/outputs/accueil-velo.html');pg.evaluate("localStorage.clear()");pg.reload();pg.wait_for_timeout(900)
+    v=lambda:pg.evaluate("({intro:!$('#intro').hidden,auth:!$('#auth').hidden,err:$('#auE').textContent})")
+    print('start',v());pg.click('#isk');pg.wait_for_timeout(200);print('after intro',v());pg.screenshot(path='t_auth1.png')
+    pg.click('#auGo');print('empty',v())
+    pg.fill('#au_pre','Alan');pg.fill('#au_mail','alan@');pg.click('#auGo');print('bad mail',v()['err'])
+    pg.fill('#au_mail','alan@exemple.fr');pg.fill('#au_pw','abc');pg.click('#auGo');print('short pw',v()['err'])
+    pg.fill('#au_pw','motdepasse1');pg.click('#auGo');print('no cgu',v()['err'])
+    pg.check('#au_cgu');pg.click('#auGo');pg.wait_for_timeout(200);print('created',v())
+    pg.evaluate("showPg('p')");print(pg.evaluate("({mail:$('#acctMail').textContent,name:$('#meName').textContent,f:$('#f_pre').value,lo:$('#lout').textContent,stored:localStorage.getItem('mr_acct')})"))
+    pg.reload();pg.wait_for_timeout(700);print('reload',v())
+    pg.evaluate("showPg('p')");pg.click('#lout');pg.wait_for_timeout(200);print('logout',v())
+    pg.click('#auIn');pg.screenshot(path='t_auth2.png');pg.fill('#au_mail','alan@exemple.fr');pg.fill('#au_pw','motdepasse1');pg.click('#auGo');print('login',v())
+    pg.evaluate("localStorage.removeItem('mr_acct')");pg.reload();pg.wait_for_timeout(600);pg.click('#auSk');print('guest',v());pg.reload();pg.wait_for_timeout(600);print('guest reload',v(),errs)

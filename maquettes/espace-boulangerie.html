@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Miam Ride – Espace boulangerie</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap">
+<style>
+:root{--ink:#141414;--muted:#6A6258;--peach:#FFF0DD;--yellow:#FFD21F;--red:#E5432D;--green:#1E8A4C;color-scheme:light}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{background:#fff;color:var(--ink);font-family:Poppins,system-ui,-apple-system,"Segoe UI",sans-serif;font-size:14px;line-height:1.45}
+.app{max-width:480px;margin:0 auto;padding:12px 14px 40px}
+h2,h3{margin:0;font-weight:800;letter-spacing:-.02em}
+.brand{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.brand b{font-size:22px;font-weight:800;letter-spacing:-.03em;background:var(--yellow);padding:0 10px;border-radius:10px;transform:rotate(-2deg)}
+.brand span{font-size:12px;font-weight:600;color:var(--muted)}
+.who{display:flex;justify-content:space-between;align-items:center;gap:10px;border:2px solid var(--ink);border-radius:18px;padding:10px 14px}
+.who b{font-weight:800}.who small{display:block;color:var(--muted);font-size:12px}
+.ok{font-size:11px;font-weight:800;background:#DDF3E5;color:var(--green);border:2px solid var(--green);border-radius:99px;padding:1px 10px;white-space:nowrap}
+.sess{font-size:12px;color:var(--muted);margin:6px 2px 12px}
+.tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:14px}
+.tabs button{border:2px solid var(--ink);background:#fff;color:var(--ink);border-radius:99px;padding:9px 2px;font:800 12.5px Poppins,sans-serif;cursor:pointer}
+.tabs button[aria-selected="true"]{background:var(--ink);color:#fff}
+section[hidden]{display:none}
+.box{border:2px solid var(--ink);border-radius:20px;padding:14px;margin-bottom:12px;background:#fff}
+.box.peach{background:var(--peach)}
+.sub{color:var(--muted);font-size:13px;margin:4px 0 0}
+.demo{margin-top:12px}.demo p{font-size:12px;font-weight:600;margin:0 0 6px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chips button{border:2px solid var(--ink);background:#fff;color:var(--ink);border-radius:99px;padding:5px 11px;font:600 12px Poppins,sans-serif;cursor:pointer}
+.btn{width:100%;border:2px solid var(--ink);border-radius:99px;padding:13px;background:var(--yellow);color:var(--ink);font:800 15px Poppins,sans-serif;cursor:pointer;box-shadow:3px 3px 0 var(--ink);margin-top:12px}
+.btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
+.btn.ghost{background:#fff;box-shadow:none}
+.row{display:flex;gap:8px}.row .btn{margin-top:12px}
+.dots{display:flex;gap:4px;margin:10px 0 6px}
+.dots i{flex:1;max-width:28px;aspect-ratio:1;border-radius:50%;border:2px solid var(--ink);display:flex;align-items:center;justify-content:center;font-style:normal;font-size:10px;font-weight:800;background:#fff}
+.dots i.on{background:var(--yellow)}.dots i.now{background:var(--ink);color:#fff}.dots i.gift{border-radius:8px}
+.big{font-size:20px;font-weight:800}
+.tag{display:inline-block;font-size:12px;font-weight:600;border:2px solid var(--ink);border-radius:99px;padding:1px 10px;background:#fff}
+.reward{background:var(--yellow);border:2px solid var(--ink);border-radius:14px;padding:10px 12px;font-weight:800;margin-top:10px}
+.err{border-color:var(--red);background:#FFE9E5}.err b{color:var(--red)}
+.good{border-color:var(--green);background:#EAF7EE}
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.kpis div{border:2px solid var(--ink);border-radius:16px;padding:8px;text-align:center;font-size:11px;color:var(--muted)}
+.kpis b{display:block;font-size:22px;color:var(--ink);font-weight:800}
+.log{list-style:none;margin:0;padding:0}
+.log li{display:flex;justify-content:space-between;gap:8px;padding:9px 0;border-bottom:2px solid var(--peach);font-size:13px}
+.log li:last-child{border:0}.log small{color:var(--muted);display:block}.log .t{font-weight:800;white-space:nowrap}
+label{display:block;font-size:12px;font-weight:600;margin:12px 0 4px}
+input[type=text],input[type=number],select{width:100%;border:2px solid var(--ink);border-radius:14px;padding:9px 12px;font:inherit;background:#fff;color:var(--ink)}
+.chk{display:flex;flex-wrap:wrap;gap:6px}
+.chk button{border:2px solid var(--ink);background:#fff;color:var(--ink);border-radius:99px;padding:5px 11px;font:600 12px Poppins,sans-serif;cursor:pointer}
+.chk button[aria-pressed="true"]{background:var(--yellow)}
+.rk{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}.rk li{display:flex;justify-content:space-between;gap:10px;font-size:13px}.rk li b{font-weight:600}.rk li span{color:var(--muted);text-align:right}.rk .top{color:var(--ink);font-weight:700}
+.dev{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px 0;border-bottom:2px solid var(--peach);font-size:13px}
+.dev:last-child{border:0}.dev button{border:2px solid var(--ink);background:#fff;border-radius:99px;padding:3px 10px;font:600 12px Poppins,sans-serif;cursor:pointer}
+.per{display:flex;gap:6px;margin-bottom:12px}.per button{flex:1;border:2px solid var(--ink);background:#fff;color:var(--ink);border-radius:99px;padding:6px 4px;font:700 12.5px Poppins,sans-serif;cursor:pointer}.per button[aria-pressed=true]{background:var(--yellow)}
+.bars{display:flex;align-items:flex-end;gap:6px;height:120px;margin-top:8px}.bars>div{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;font-size:11px;font-weight:700}
+.bars i{display:block;width:100%;background:#fff;border:2px solid var(--ink);border-radius:8px 8px 0 0;min-height:4px}.bars .top i{background:var(--yellow)}.bars small{font-weight:600;color:var(--muted);font-size:11px;margin-top:3px}
+.hbar{margin-top:7px;font-size:13px}.hbar>div{display:flex;justify-content:space-between;gap:8px}.hbar>div>b{white-space:nowrap}.hbar>span{display:block;height:9px;border:2px solid var(--ink);border-radius:99px;background:#fff;margin-top:3px;overflow:hidden}.hbar>span i{display:block;height:100%;background:var(--yellow)}
+.split{display:flex;height:26px;border:2px solid var(--ink);border-radius:99px;overflow:hidden;margin-top:8px;font-size:11.5px;font-weight:700}.split div{display:flex;align-items:center;justify-content:center}.split div:first-child{background:var(--yellow)}
+.tip{border:2px dashed var(--ink);border-radius:12px;padding:6px 10px;margin-top:8px;font-size:12.5px;background:#fff}
+.mt{margin-top:12px}.val{font-size:26px;font-weight:800;line-height:1.1}
+.toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:var(--ink);color:#fff;border-radius:99px;padding:9px 18px;font-size:13px;font-weight:600;opacity:0;pointer-events:none;transition:opacity .2s}
+.toast.on{opacity:1}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){.toast{transition:none}}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="brand"><b>Miam Ride</b><span>Espace boulangerie · démo</span></div>
+  <div class="who"><div><b>Le Fournil des Trois Épis</b><small>Commerce fictif, pour la démonstration</small></div><span class="ok">Connecté</span></div>
+  <p class="sess">Tu restes connecté 30 jours après ta dernière utilisation.</p>
+
+  <div class="tabs" role="tablist">
+    <button role="tab" aria-selected="true" data-t="v">Valider</button>
+    <button role="tab" aria-selected="false" data-t="p">Passages</button>
+    <button role="tab" aria-selected="false" data-t="s">Stats</button>
+    <button role="tab" aria-selected="false" data-t="c">Commerce</button>
+  </div>
+
+  <section id="v">
+    <div class="box peach">
+      <h2 style="font-size:17px">Valider un passage</h2>
+      <p class="sub">Ouvre l’appareil photo de ton téléphone et scanne le QR code du cycliste : cette page s’ouvre avec sa carte de fidélité.</p>
+      <div class="demo"><p>Démonstration : simuler un scan</p>
+        <div class="chips" id="sc"></div></div>
+    </div>
+    <div id="res"></div>
+  </section>
+
+  <section id="p" hidden>
+    <div class="kpis"><div><b id="k1">6</b>aujourd’hui</div><div><b id="k2">31</b>cette semaine</div><div><b id="k3">2</b>offerts</div></div>
+    <div class="box"><h3 style="font-size:15px;margin-bottom:4px">Avis des cyclistes</h3><p class="sub" style="margin:0">Après chaque passage validé chez toi, le cycliste dit ce qu’il a pris et le note de 1 à 5. Tu les vois ici, sans nom. </p><div id="avl"></div><p class="sub" style="margin:6px 0 0;font-size:12px">Un avis ne peut venir que d’un passage validé par QR dans ta boulangerie. Un produit n’est classé qu’à partir de plusieurs avis.</p><p class="sub" style="margin:6px 0 0;font-size:12px">Les cyclistes confirment aussi ce que tu proposes : un produit que tu déclares est « confirmé » à partir de 3 avis, et un produit absent de ta liste mais cité par 3 cyclistes est ajouté. Une note s’affiche à partir de 5 avis. Tu peux signaler un avis, pas le supprimer.</p></div>
+    <details class="box" id="avr"><summary style="font:800 14px Poppins,sans-serif;cursor:pointer">Règles des avis (réglables, à affiner)</summary><ul class="sub" style="margin:8px 0 0;padding-left:18px;line-height:1.5"><li>Un avis vient d’un passage validé par QR chez toi.</li><li>Un seul avis par cycliste, produit et jour.</li><li>Un produit est confirmé à partir de 3 avis ; une note s’affiche à partir de 5 avis.</li><li>Tu peux répondre (280 caractères) et signaler un avis ; tu ne peux ni le supprimer ni le modifier.</li><li>Un avis signalé reste visible jusqu’à la décision de modération.</li><li>Les cyclistes gagnent 5 XP par avis, jusqu’à 20 avis récompensés par mois.</li></ul></details>
+    <div class="box"><h3 style="font-size:15px;margin-bottom:4px">Derniers passages</h3><ul class="log" id="log"></ul></div>
+  </section>
+
+  <section id="s" hidden>
+    <p class="sub" style="margin:0 0 10px"><b>Chiffres de démonstration</b> pour ce commerce fictif. En vrai, ils viennent des passages validés par QR.</p>
+    <div class="per" id="per" role="group" aria-label="Période"></div>
+    <div class="kpis" id="sk" style="grid-template-columns:repeat(2,1fr)"></div>
+    <div class="box"><h3 style="font-size:15px">Jours les plus actifs</h3><div class="bars" id="sd"></div><p class="sub" id="sdt"></p></div>
+    <div class="box"><h3 style="font-size:15px">Heures de passage</h3><div id="sh"></div></div>
+    <div class="box"><h3 style="font-size:15px">Nouveaux et fidèles</h3><div class="split" id="sn"></div><p class="sub" id="snt"></p></div>
+    <div class="box"><h3 style="font-size:15px">Ce que les cyclistes ont pris</h3><p class="sub" style="margin:0">Produits cités dans les avis après un passage validé. Une note s’affiche à partir de 5 avis.</p><div id="sp"></div></div>
+    <div class="box peach"><h3 style="font-size:15px">Ce que l’appli t’apporte</h3><label for="bk" style="margin-top:6px">Ton panier moyen par cycliste (en €), à ajuster</label><input type="number" id="bk" value="8" min="1" max="100" step="0.5"><p class="val mt" id="sv"></p><p class="sub" style="margin:2px 0 0;font-size:12px">Estimation : passages × panier moyen que tu indiques. Ce n’est pas un chiffre d’affaires mesuré.</p></div>
+  </section>
+
+  <section id="c" hidden>
+    <div class="box">
+      <h3 style="font-size:15px">Avantage à chaque passage</h3>
+      <label for="adv">Ce que tu offres au cycliste, affiché dans l’appli</label>
+      <select id="adv"><option>-5 % sur la pause</option><option selected>-10 % sur la pause</option><option>-15 % sur la pause</option><option>Une viennoiserie offerte</option><option>Un café offert</option><option value="__o">Autre…</option></select>
+      <input type="text" id="advo" placeholder="Ex. : café offert dès 2 achats" maxlength="40" hidden style="margin-top:8px">
+      <div class="box peach" style="margin:12px 0 0"><p class="sub" style="margin:0 0 4px;font-weight:600;color:var(--ink)">Ce que verront les cyclistes sur ta fiche</p><b id="advp"></b></div>
+      <h3 style="font-size:15px;margin-top:18px">Programme de fidélité</h3>
+      <label for="nb">Nombre de passages pour la récompense</label>
+      <input type="number" id="nb" value="10" min="3" max="20">
+      <label for="rw">Récompense</label>
+      <select id="rw"><option>Une viennoiserie offerte</option><option>Un café offert</option><option>Une boisson chaude offerte</option><option>-20 % sur la pause</option></select>
+      <div class="box peach" style="margin:12px 0 0"><p class="sub" style="margin:0 0 2px;font-weight:600;color:var(--ink)">Ce que verront tes clients</p><div id="pvd"></div><p class="sub" id="pvt" style="margin:2px 0 0"></p></div>
+      <p class="sub" style="font-size:12px">Si tu changes ces réglages, les compteurs des clients sont conservés. Un client qui a déjà plus de passages que le nouveau total obtient sa récompense à son prochain passage.</p>
+      <h3 style="font-size:15px;margin-top:18px">Tes spécialités</h3>
+      <label>Coche ce que tu fais de mieux. Les cyclistes qui cherchent un produit (un flan, un éclair…) voient d’abord les boulangeries les mieux notées pour ce produit.</label>
+      <div class="chk" id="menu"></div>
+      <div class="box peach" style="margin:12px 0 0"><p class="sub" style="margin:0 0 6px;font-weight:600;color:var(--ink)">Où tu apparaîtras</p><ul class="rk" id="rk"></ul><p class="sub" style="margin:6px 0 0;font-size:12px">L’ordre dans les résultats dépend des notes laissées par les cyclistes après leur passage. Tant qu’il n’y en a pas, tu apparais avec les autres boulangeries du secteur qui proposent le produit.</p></div>
+      <button class="btn" id="save" type="button">Enregistrer</button>
+    </div>
+    <div class="box">
+      <h3 style="font-size:15px">Appareils connectés</h3>
+      <div id="devs"></div>
+      <p class="sub">Un appareil non utilisé pendant 30 jours est déconnecté tout seul.</p>
+    </div>
+    <div class="box">
+      <h3 style="font-size:15px">Employés</h3>
+      <p class="sub">Chaque vendeur a sa propre connexion : on sait qui valide, et tu peux retirer un accès à tout moment.</p>
+      <button class="btn ghost" type="button" id="inv">Inviter un employé</button>
+    </div>
+  </section>
+</div>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+const $=s=>document.querySelector(s);
+const target=()=>Math.max(3,Math.min(20,Math.round(+$('#nb').value)||10));
+const advV=()=>{const v=$('#adv').value;return v==='__o'?($('#advo').value.trim()||'aucun avantage'):v};
+const rew=()=>$('#rw').value.toLowerCase();
+const cnt=(s,T)=>s.k==='ten'?T-1:Math.min(s.count,T-2);
+const GIFT='<svg viewBox="0 0 20 20" width="13" height="13" aria-hidden="true"><rect x="2.5" y="8" width="15" height="9.5" rx="1.5" fill="#141414"/><rect x="1.5" y="5.5" width="17" height="4" rx="1.5" fill="#141414"/><path d="M10 5.5v12" stroke="#FFD21F" stroke-width="2"/><path d="M10 5.5C8 1.5 4 2.5 5 4.8c.7 1.4 3.2.9 5 .7zM10 5.5c2-4 6-3 5-.7-.7 1.4-3.2.9-5 .7z" fill="none" stroke="#141414" stroke-width="1.6" stroke-linejoin="round"/></svg>';
+const state={today:6,week:31,gifts:2,log:[["09:12","Lucas P.","Passage 4 sur 10"],["09:40","Inès D.","Passage 9 sur 10"],["10:05","Marc T.","10e passage : viennoiserie offerte"],["10:31","Sophie L.","Passage 2 sur 10"]]};
+const SC=[
+ {k:"ok",label:"Passage normal",name:"Camille R.",count:6},
+ {k:"ten",label:"10e passage",name:"Julien M.",count:9},
+ {k:"dup",label:"Déjà validé aujourd’hui",name:"Camille R.",count:6},
+ {k:"exp",label:"QR expiré",name:"Camille R.",count:6},
+ {k:"far",label:"Téléphone loin de la boulangerie",name:"Camille R.",count:6}
+];
+$('#sc').innerHTML=SC.map(s=>`<button type="button" data-k="${s.k}">${s.label}</button>`).join('');
+function dots(done,now){const T=target();return `<div class="dots" aria-label="${done} passages validés sur ${T}">`+Array.from({length:T},(_,i)=>i===T-1?`<i class="gift${now&&done===T-1?' now':''}">${GIFT}</i>`:`<i class="${i<done?'on':''}${i===done&&now?' now':''}">${i<done?'✓':i+1}</i>`).join('')+'</div>'}
+function show(k){
+ const s=SC.find(x=>x.k===k),R=$('#res'),adv=advV();
+ if(k==='exp'){R.innerHTML=`<div class="box err"><b>QR code expiré</b><p class="sub">Les codes changent toutes les minutes. Demande au cycliste de rafraîchir sa carte, puis scanne à nouveau.</p><button class="btn ghost" data-x type="button">Compris</button></div>`}
+ else if(k==='far'){R.innerHTML=`<div class="box err"><b>Position non conforme</b><p class="sub">Ton téléphone ne semble pas se trouver dans la boulangerie. La validation n’est possible que sur place.</p><button class="btn ghost" data-x type="button">Compris</button></div>`}
+ else if(k==='dup'){R.innerHTML=`<div class="box err"><b>Passage déjà validé aujourd’hui</b><p class="sub">${s.name} a déjà validé un passage chez toi ce matin, à 09:12. Un seul passage par jour compte pour la fidélité.</p><button class="btn ghost" data-x type="button">Compris</button></div>`}
+ else{
+  const T=target(),c=cnt(s,T),ten=c===T-1,n=c+1;
+  R.innerHTML=`<div class="box"><span class="tag">QR valide · position vérifiée</span><div class="big" style="margin-top:8px">${s.name}</div>
+   <p class="sub">Carte de fidélité : ${c} passage${c>1?'s':''} validé${c>1?'s':''}. Celui-ci sera le ${n}${n===1?'er':'e'}.</p>${dots(c,true)}
+   ${ten?`<div class="reward">${GIFT} ${T}e passage : offre ${rew()}</div>`:`<p class="sub">Avantage de ce passage : <b>${adv}</b></p>`}
+   <div class="row"><button class="btn ghost" data-x type="button">Refuser</button><button class="btn" data-v="${k}" type="button">${ten?'Valider et offrir':'Valider le passage'}</button></div></div>`}
+ R.querySelectorAll('[data-x]').forEach(b=>b.onclick=()=>{R.innerHTML=''});
+ R.querySelectorAll('[data-v]').forEach(b=>b.onclick=()=>validate(b.dataset.v));
+ R.scrollIntoView({block:'nearest',behavior:'smooth'})}
+function validate(k){
+ const s=SC.find(x=>x.k===k),T=target(),c=cnt(s,T),ten=c===T-1,n=c+1,t=new Date().toTimeString().slice(0,5);
+ state.today++;state.week++;if(ten)state.gifts++;
+ state.log.unshift([t,s.name,ten?`${T}e passage : ${rew()}`:`Passage ${n} sur ${T}`]);
+ $('#res').innerHTML=`<div class="box good"><div class="big">Passage validé</div><p class="sub">${s.name} a maintenant ${ten?'0 passage : sa carte repart de zéro':n+' passage'+(n>1?'s':'')+' sur '+T}.</p>${ten?`<div class="reward">${GIFT} Offre ${rew()}</div>`:`<p class="sub">N’oublie pas d’appliquer : <b>${$('#adv').value||'aucun avantage'}</b></p>`}<button class="btn" data-x type="button">Terminer</button></div>`;
+ $('#res').querySelectorAll('[data-x]').forEach(b=>b.onclick=()=>{$('#res').innerHTML=''});
+ renderLog()}
+function renderLog(){$('#k1').textContent=state.today;$('#k2').textContent=state.week;$('#k3').textContent=state.gifts;
+ $('#log').innerHTML=state.log.map(l=>`<li><span><b>${l[1]}</b><small>${l[2]}</small></span><span class="t">${l[0]}</span></li>`).join('')}
+$('#sc').querySelectorAll('button').forEach(b=>b.onclick=()=>show(b.dataset.k));
+document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>{document.querySelectorAll('.tabs button').forEach(x=>x.setAttribute('aria-selected',x===b));['v','p','s','c'].forEach(id=>$('#'+id).hidden=id!==b.dataset.t)});
+const PRODS=['Flan','Croissant','Pain au chocolat','Éclair','Tarte','Baguette tradition','Sandwich'],PRODX=['Mille-feuille','Chausson aux pommes','Macaron','Religieuse','Paris-Brest'];
+const ALLP=PRODS.concat(PRODX),mine=new Set(['Flan','Croissant','Sandwich','Baguette tradition']);
+function rank(){
+ $('#menu').innerHTML=ALLP.map(x=>`<button type="button" aria-pressed="${mine.has(x)}">${x}</button>`).join('');
+ $('#menu').querySelectorAll('button').forEach((b,i)=>b.onclick=()=>{const x=ALLP[i];mine.has(x)?mine.delete(x):mine.add(x);rank()});
+ const L=ALLP.filter(p=>mine.has(p)).map(p=>`<li><b>${p}</b><span>dans les recherches « ${p.toLowerCase()} »</span></li>`);
+ $('#rk').innerHTML=L.length?L.join(''):'<li><span>Coche au moins une spécialité pour apparaître dans les recherches par produit.</span></li>'}
+rank();
+const toast=m=>{const t=$('#toast');t.textContent=m;t.classList.add('on');setTimeout(()=>t.classList.remove('on'),1800)};
+$('#save').onclick=()=>toast('Modifications enregistrées (démo)');
+$('#inv').onclick=()=>toast('Invitation envoyée par e-mail (démo)');
+const devs=[['iPhone de Marie','cet appareil'],['Tablette du comptoir','dernière utilisation : hier']];
+function renderDevs(){$('#devs').innerHTML=devs.map((d,i)=>`<div class="dev"><span><b>${d[0]}</b><br><small style="color:var(--muted)">${d[1]}</small></span>${i?'<button type="button" data-d="'+i+'">Déconnecter</button>':''}</div>`).join('');$('#devs').querySelectorAll('[data-d]').forEach(b=>b.onclick=()=>{devs.splice(+b.dataset.d,1);renderDevs();toast('Appareil déconnecté (démo)')})}
+function pa(){$('#advo').hidden=$('#adv').value!=='__o';$('#advp').innerHTML=GIFT+' '+advV()}
+['input','change'].forEach(e=>{$('#adv').addEventListener(e,pa);$('#advo').addEventListener(e,pa)});pa();
+function pv(){const T=target(),p=Math.min(6,T-2);$('#pvd').innerHTML=dots(p,false);$('#pvt').textContent=`Exemple : ${p} passages · encore ${T-p} pour obtenir ${rew()}`}
+['input','change'].forEach(e=>{$('#nb').addEventListener(e,pv);$('#rw').addEventListener(e,pv)});
+pv();renderDevs();renderLog();
+
+/* ===== Avis : répondre et signaler (exemples de démonstration) ===== */
+const AV_RULES={replyMax:280};
+const AV=[{id:1,p:'Flan',s:5,d:'27/10'},{id:2,p:'Croissant',s:4,d:'26/10'},{id:3,p:'Baguette tradition',s:5,d:'26/10'},{id:4,p:'Flan',s:2,d:'24/10'},{id:5,p:'Sandwich',s:4,d:'23/10'}];
+let AVS={};try{AVS=JSON.parse(localStorage.getItem('mr_av')||'{}')||{}}catch(e){}
+const avSave=()=>{try{localStorage.setItem('mr_av',JSON.stringify(AVS))}catch(e){}};
+const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let avOpen=null;
+function avRender(){$('#avl').innerHTML=AV.map(a=>{const st=AVS[a.id]||{},o=avOpen&&avOpen.id===a.id?avOpen.k:null;
+ return `<div style="border-top:1.5px solid #ddd;margin-top:10px;padding-top:8px"><div><b>${a.p}</b> · ${a.s}/5 <span class="sub" style="font-size:12px">· ${a.d} · Cycliste anonyme</span></div>
+ ${st.rpt?`<p class="sub" style="margin:4px 0 0;font-size:12px"><b>Signalé</b> (${esc(st.rpt)}) : en cours d’examen. L’avis reste visible jusqu’à la décision.</p>`:''}
+ ${st.rep&&o!=='rep'?`<p style="margin:6px 0 0;font-size:13px;background:var(--peach);border-radius:12px;padding:8px 10px"><b>Ta réponse :</b> ${esc(st.rep)}</p>`:''}
+ ${o==='rep'?`<textarea id="avt" maxlength="${AV_RULES.replyMax}" rows="3" style="width:100%;margin-top:6px;font:500 13px Poppins,sans-serif;border:2px solid var(--ink);border-radius:12px;padding:8px">${esc(st.rep||'')}</textarea><div class="sub" style="font-size:11.5px"><span id="avn">0</span>/${AV_RULES.replyMax}</div><div class="chips" style="margin-top:6px"><button type="button" data-av="send" data-id="${a.id}">Publier la réponse</button><button type="button" data-av="cancel">Annuler</button></div>`:''}
+ ${o==='rpt'?`<select id="avs" style="margin-top:6px;font:600 13px Poppins,sans-serif;border:2px solid var(--ink);border-radius:99px;padding:6px 10px;background:#fff"><option>Propos injurieux</option><option>Produit qui n’existe pas chez moi</option><option>Autre motif</option></select><div class="chips" style="margin-top:6px"><button type="button" data-av="sendr" data-id="${a.id}">Envoyer le signalement</button><button type="button" data-av="cancel">Annuler</button></div>`:''}
+ ${o?'':`<div class="chips" style="margin-top:6px"><button type="button" data-av="rep" data-id="${a.id}">${st.rep?'Modifier ma réponse':'Répondre'}</button>${st.rpt?'':`<button type="button" data-av="rpt" data-id="${a.id}">Signaler</button>`}</div>`}</div>`}).join('');
+ const t=$('#avt');if(t){const n=()=>{$('#avn').textContent=t.value.length};t.oninput=n;n()}
+ $('#avl').querySelectorAll('[data-av]').forEach(b=>b.onclick=()=>{const k=b.dataset.av,id=+b.dataset.id;
+  if(k==='rep'||k==='rpt')avOpen={id,k};else if(k==='cancel')avOpen=null;
+  else if(k==='send'){const v=$('#avt').value.trim().slice(0,AV_RULES.replyMax);AVS[id]=Object.assign(AVS[id]||{},{rep:v||undefined});avSave();avOpen=null}
+  else if(k==='sendr'){AVS[id]=Object.assign(AVS[id]||{},{rpt:$('#avs').value});avSave();avOpen=null}
+  avRender()})}
+avRender();
+
+/* ===== Statistiques (données de démonstration) ===== */
+const ST_RULES={confMin:3,revMin:5},ST_DECL=['Baguette tradition','Croissant','Sandwich','Flan'];
+const JOURS=['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'],JOURS_L=['lundi','mardi','mercredi','jeudi','vendredi','samedi','dimanche'];
+const ST={
+ '7':{l:'7 jours',pass:31,cli:24,fid:9,off:2,days:[3,2,4,3,5,6,8],hrs:[4,15,9,3],neu:15,rev:9,prod:[['Flan',5,4.4],['Croissant',4,4.5],['Baguette tradition',3,4.7],['Sandwich',2,4.0]]},
+ '30':{l:'30 jours',pass:118,cli:71,fid:28,off:9,days:[12,10,14,13,19,24,26],hrs:[14,58,34,12],neu:38,rev:33,prod:[['Flan',21,4.3],['Croissant',17,4.6],['Baguette tradition',12,4.8],['Sandwich',8,4.2],['Tarte',4,4.5]]},
+ '90':{l:'3 mois',pass:402,cli:190,fid:82,off:31,days:[41,35,48,44,63,81,90],hrs:[46,198,121,37],neu:105,rev:85,prod:[['Flan',68,4.3],['Croissant',55,4.6],['Baguette tradition',41,4.8],['Sandwich',27,4.2],['Tarte',13,4.5],['Éclair',3,4.0]]}};
+const HR=['6 h – 9 h','9 h – 12 h','12 h – 15 h','Après 15 h'];
+let STP='7';const fr=n=>String(n).replace('.',',');
+function stRender(){const d=ST[STP];
+ $('#per').innerHTML=Object.keys(ST).map(k=>`<button type="button" data-k="${k}" aria-pressed="${k===STP}">${ST[k].l}</button>`).join('');
+ $('#per').querySelectorAll('button').forEach(b=>b.onclick=()=>{STP=b.dataset.k;stRender()});
+ $('#sk').innerHTML=[[d.pass,'passages'],[d.cli,'cyclistes différents'],[d.fid,'cyclistes fidèles (3 passages ou plus)'],[d.off,'récompenses offertes']].map(([v,t])=>`<div><b>${v}</b>${t}</div>`).join('');
+ const mx=Math.max(...d.days),ti=d.days.indexOf(mx);
+ $('#sd').innerHTML=d.days.map((v,i)=>`<div class="${i===ti?'top':''}" role="img" aria-label="${JOURS_L[i]} : ${v} passages">${v}<i style="height:${Math.max(4,Math.round(v/mx*88))}%"></i><small>${JOURS[i]}</small></div>`).join('');
+ $('#sdt').textContent=`Ton jour le plus actif : ${JOURS_L[ti]} (${Math.round(mx/d.pass*100)} % des passages). Le week-end représente ${Math.round((d.days[5]+d.days[6])/d.pass*100)} % du total.`;
+ const hm=Math.max(...d.hrs);
+ $('#sh').innerHTML=d.hrs.map((v,i)=>`<div class="hbar"><div><span>${HR[i]}</span><b>${v}</b></div><span><i style="width:${Math.round(v/hm*100)}%"></i></span></div>`).join('');
+ const t=d.neu+d.rev;
+ $('#sn').innerHTML=`<div style="width:${Math.round(d.neu/t*100)}%">Nouveaux ${d.neu}</div><div style="width:${100-Math.round(d.neu/t*100)}%">Revenus ${d.rev}</div>`;
+ $('#snt').textContent=`${Math.round(d.rev/t*100)} % des cyclistes sont déjà venus avant : c’est ton programme de fidélité qui les fait revenir.`;
+ $('#sp').innerHTML=d.prod.map(([p,n,m])=>{const decl=ST_DECL.includes(p),conf=n>=ST_RULES.confMin;
+  const tag=decl?(conf?'confirmé par les cyclistes':''):(conf?'cité par les cyclistes, à ajouter à tes spécialités ?':'');
+  return `<div class="hbar"><div><span><b>${p}</b>${tag?` <small style="color:var(--muted)">· ${tag}</small>`:''}</span><b>${n} avis${n>=ST_RULES.revMin?' · '+fr(m)+'/5':''}</b></div><span><i style="width:${Math.round(n/d.prod[0][1]*100)}%"></i></span></div>`}).join('');
+ stVal()}
+function stVal(){const d=ST[STP],b=Math.max(1,+$('#bk').value||8);$('#sv').textContent=`≈ ${Math.round(d.pass*b).toLocaleString('fr-FR')} €`;}
+$('#bk').oninput=stVal;
+stRender();
+
+
+</script>
+</body>
+</html>

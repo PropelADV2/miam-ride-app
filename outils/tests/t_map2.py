@@ -1,0 +1,16 @@
+from playwright.sync_api import sync_playwright
+with sync_playwright() as p:
+    b=p.chromium.launch(args=['--no-sandbox']);pg=b.new_page(viewport={'width':400,'height':860});errs=[];pg.on('pageerror',lambda e:errs.append(str(e)))
+    pg.goto('file:///mnt/user-data/outputs/accueil-velo.html');pg.wait_for_timeout(500)
+    pg.get_by_text('Passer',exact=True).first.click();pg.wait_for_timeout(300)
+    pg.get_by_text('Plus tard',exact=True).first.click();pg.wait_for_timeout(400)
+    pg.evaluate("document.querySelector('#go').click()");pg.wait_for_timeout(300)
+    pg.evaluate("choose(cands(0).list[0])");pg.wait_for_timeout(1300)
+    pg.mouse.click(200,300);pg.wait_for_timeout(400)
+    vb=lambda:pg.evaluate("document.querySelector('#mapx svg').getAttribute('viewBox')")
+    print(vb())
+    pg.mouse.move(200,430);pg.mouse.wheel(0,-300);pg.wait_for_timeout(300);print('wheel',vb())
+    pg.click('#mapx [data-z=in]');print('plus',vb())
+    pg.mouse.move(200,430);pg.mouse.down();pg.mouse.move(120,380,steps=6);pg.mouse.up();print('drag',vb())
+    pg.click('#mapx [data-z=fit]');print('fit',vb());print(errs)
+    pg.screenshot(path='m4.png')

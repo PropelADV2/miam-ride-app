@@ -1,0 +1,19 @@
+for f in ['accueil-velo.html','miam-ride-osm.html','introduction-miam-ride.html']:
+    p='/mnt/user-data/outputs/'+f;s=open(p,encoding='utf-8').read()
+    def rep(a,b):
+        global s
+        assert s.count(a)==1,(f,a[:80],s.count(a));s=s.replace(a,b)
+    # HTML: notification + réglage profil
+    rep('<div class="ov" id="rev" hidden','<div class="pn" id="pn" hidden role="status" aria-live="polite"></div>\n  <div class="ov" id="rev" hidden')
+    rep('<div class="row"><span>Avis donnés</span>','<div class="row"><label for="f_near">Alerte à 500 m d’une boulangerie</label><select id="f_near"><option value="1">Activée</option><option value="0">Désactivée</option></select></div><div class="row"><span>Avis donnés</span>')
+    # CSS
+    rep('.pps{margin-top:10px;','.pn{position:absolute;top:10px;left:10px;right:10px;z-index:90;display:flex;gap:10px;align-items:center;background:#141414;color:#fff;border:2px solid #141414;border-radius:18px;padding:10px 12px;box-shadow:0 6px 18px rgba(0,0,0,.3);animation:pnin .3s ease-out}.pn .pi{flex:none;width:34px;height:34px;border-radius:10px;background:#FFD21F;color:#141414;display:grid;place-items:center;font:800 16px Poppins,sans-serif}.pn .pt{flex:1;min-width:0;display:flex;flex-direction:column;font-size:13px;line-height:1.3}.pn .pt b{font-weight:700}.pn .pt small{color:#ddd;font-size:12px}.pn button{flex:none;border:0;border-radius:99px;background:#FFD21F;color:#141414;padding:7px 11px;font:800 12px Poppins,sans-serif;cursor:pointer}@keyframes pnin{from{transform:translateY(-12px);opacity:0}to{transform:none;opacity:1}}@media (prefers-reduced-motion:reduce){.pn{animation:none}}.pps{margin-top:10px;')
+    # JS: pushNote + réglage
+    rep("function loyHit(n){","let PNT=0;const nearOn=()=>{try{return localStorage.getItem('mr_near')!=='0'}catch(e){return true}};\nfunction pushNote(title,text,label,act){const N=$('#pn');if(!N)return;N.innerHTML=`<span class=\"pi\">M</span><span class=\"pt\"><b>${title}</b><small>${text}</small></span>${act?`<button type=\"button\" id=\"pnb\">${label}</button>`:''}`;N.hidden=false;clearTimeout(PNT);PNT=setTimeout(()=>{N.hidden=true},10000);try{navigator.vibrate&&navigator.vibrate([60,40,60])}catch(e){}if(act)$('#pnb').onclick=()=>{N.hidden=true;clearTimeout(PNT);act()}}\nconst nearTxt='Ton passage se valide avec ton téléphone, même si tu roules avec ta montre ou ton GPS.';\nfunction loyHit(n){")
+    # live: dans recNext
+    rep("const done=new Set(REC.stops.map(x=>x.n)),nx=P.stops.find(x=>!done.has(x.n)),left=Math.max(0,P.km-REC.km),d=nx?nx.km-REC.km:0,","const done=new Set(REC.stops.map(x=>x.n)),nx=P.stops.find(x=>!done.has(x.n)),left=Math.max(0,P.km-REC.km),d=nx?nx.km-REC.km:0;REC.near=REC.near||{};if(nx&&nx.gift&&d<=.5&&!REC.near[nx.n]&&nearOn()){REC.near[nx.n]=1;const m=Math.round(Math.max(0,d)*1000/50)*50;pushNote(m>0?`${nx.n} dans ${m} m`:`Tu es chez ${nx.n}`,'Prépare ton QR code. '+nearTxt,'Ouvrir mon QR code',()=>qrOpen(nx))}\n const ")
+    rep("Object.assign(REC,{sec:0,km:0,gain:0,stops:[],","Object.assign(REC,{near:{},sec:0,km:0,gain:0,stops:[],")
+    # plan card: texte + démo
+    rep("Ta montre envoie la sortie à la fin du parcours : Miam Ride la compare au tracé et la valide.","Ta montre envoie la sortie à la fin du parcours : Miam Ride la compare au tracé et la valide. À moins de 500 m d’une boulangerie, tu reçois une notification pour préparer ton QR code.")
+    rep("</div>`:''}</div><div class=\"${q.st==='done'?'':'act'}\">${act}</div></div>`});","${q.st!=='done'&&(q.stops||[]).some(x=>!(q.pass||[]).includes(x[0]))?`<button type=\"button\" class=\"dmo2\" data-nr=\"${i}\">Démo : j’approche de la prochaine boulangerie (500 m)</button>`:''}</div>`:''}</div><div class=\"${q.st==='done'?'':'act'}\">${act}</div></div>`});") if False else None
+    open(p,'w',encoding='utf-8').write(s)

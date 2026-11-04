@@ -1,0 +1,241 @@
+<title>Inscription boulangerie (menus déroulants)</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap">
+<style>
+/* Mise en page : une colonne étroite type téléphone (le boulanger s'inscrit au comptoir), onglet « Équipe » pour la validation. Palette et ton repris de l'appli Miam Ride. */
+:root{--bg:#fff;--fg:#141414;--muted:#6A6258;--peach:#FFF0DD;--yellow:#FFD21F;--on-yellow:#141414;--line:#141414;--ok:#1E8A4C;--ok-bg:#DDF3E5;--warn:#B45309;--warn-bg:#FDEBD0;--err:#C0341F;--soft:#F6F2EC;--font:Poppins,system-ui,-apple-system,"Segoe UI",sans-serif}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#17140F;--fg:#F5EFE6;--muted:#B3A99B;--peach:#2A2118;--yellow:#FFD21F;--line:#F5EFE6;--ok:#6FD39A;--ok-bg:#16301F;--warn:#F2B25C;--warn-bg:#33240F;--err:#FF8A76;--soft:#221D16;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#17140F;--fg:#F5EFE6;--muted:#B3A99B;--peach:#2A2118;--yellow:#FFD21F;--line:#F5EFE6;--ok:#6FD39A;--ok-bg:#16301F;--warn:#F2B25C;--warn-bg:#33240F;--err:#FF8A76;--soft:#221D16;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--font);font-size:14px;line-height:1.45;padding-block:12px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.app{max-width:480px;margin:0 auto;display:flex;flex-direction:column;gap:12px}
+h1,h2,h3,p{margin:0}
+h2{font-size:20px;font-weight:800;letter-spacing:-.02em;text-wrap:balance}
+h3{font-size:15px;font-weight:800}
+.brand{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.brand b{font-size:22px;font-weight:800;letter-spacing:-.03em;background:var(--yellow);color:var(--on-yellow);padding:0 10px;border-radius:10px;transform:rotate(-2deg)}
+.brand span{font-size:12px;font-weight:600;color:var(--muted)}
+.tabs{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.tabs button,.chip,.opt{font-family:var(--font);cursor:pointer;color:var(--fg)}
+.tabs button{border:2px solid var(--line);background:var(--bg);border-radius:99px;padding:9px 4px;font-weight:800;font-size:12.5px}
+.tabs button[aria-selected="true"]{background:var(--fg);color:var(--bg)}
+:focus-visible{outline:3px solid var(--yellow);outline-offset:2px}
+.sub{color:var(--muted);font-size:13px}
+.dots{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--muted)}
+.dots i{width:26px;height:26px;border-radius:50%;border:2px solid var(--line);display:flex;align-items:center;justify-content:center;font-style:normal;font-weight:800;font-size:11px;background:var(--bg);color:var(--fg)}
+.dots i.on{background:var(--yellow);color:var(--on-yellow)}.dots i.done{background:var(--fg);color:var(--bg)}
+.dots span{margin-left:4px}
+.box{border:2px solid var(--line);border-radius:20px;padding:14px;background:var(--bg);display:flex;flex-direction:column;gap:10px}
+.box.peach{background:var(--peach)}
+label{font-size:12px;font-weight:800;display:block;margin-bottom:4px}
+input[type=text],input[type=email],input[type=tel],input[type=search]{width:100%;border:2px solid var(--line);border-radius:14px;padding:11px 12px;font:600 14px var(--font);background:var(--bg);color:var(--fg)}
+input::placeholder{color:var(--muted);font-weight:400}
+.err{color:var(--err);font-size:12px;font-weight:600;min-height:0}
+.list{display:flex;flex-direction:column;gap:8px}
+.fiche{width:100%;text-align:left;border:2px solid var(--line);border-radius:16px;padding:10px 12px;background:var(--bg);color:var(--fg);font-family:var(--font);cursor:pointer;display:flex;flex-direction:column;gap:2px}
+.fiche b{font-weight:800}.fiche small{color:var(--muted);font-size:12px}
+.fiche[aria-pressed="true"]{background:var(--yellow);color:var(--on-yellow)}.fiche[aria-pressed="true"] small{color:var(--on-yellow)}
+.src{font-size:11px;color:var(--muted)}
+.opts{display:flex;flex-direction:column;gap:8px}
+.opt{border:2px solid var(--line);background:var(--bg);border-radius:14px;padding:10px 12px;text-align:left;font-weight:600;font-size:13.5px;display:flex;justify-content:space-between;gap:8px;align-items:center}
+.opt[aria-pressed="true"]{background:var(--yellow);color:var(--on-yellow);font-weight:800}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:2px solid var(--line);background:var(--bg);border-radius:99px;padding:5px 11px;font-weight:600;font-size:12px}
+.chip[aria-pressed="true"]{background:var(--fg);color:var(--bg)}
+.btn{width:100%;border:2px solid var(--line);border-radius:99px;padding:13px;background:var(--yellow);color:var(--on-yellow);font:800 15px var(--font);cursor:pointer;box-shadow:3px 3px 0 var(--line)}
+.btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--line)}
+.btn.ghost{background:var(--bg);color:var(--fg);box-shadow:none}
+.btn:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
+.row{display:flex;gap:8px}.row>*{flex:1;min-width:0}
+.check{display:flex;gap:10px;align-items:flex-start;font-size:13px}
+.check input{width:20px;height:20px;margin-top:2px;accent-color:var(--yellow);flex:none}
+.pv{border:2px dashed var(--line);border-radius:16px;padding:12px;background:var(--peach);display:flex;flex-direction:column;gap:4px}
+.pv small{font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;font-size:10.5px}
+.pv .perk{display:inline-block;align-self:flex-start;background:var(--yellow);color:var(--on-yellow);border:2px solid var(--line);border-radius:99px;padding:1px 10px;font-weight:800;font-size:12.5px}
+.badge{display:inline-block;font-size:11px;font-weight:800;border-radius:99px;padding:1px 10px;border:2px solid currentColor;white-space:nowrap}
+.b-wait{color:var(--warn);background:var(--warn-bg)}.b-call{color:var(--fg);background:var(--soft)}.b-ok{color:var(--ok);background:var(--ok-bg)}.b-no{color:var(--err)}
+.req{display:flex;flex-direction:column;gap:8px}
+.req header{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}
+.req header>div{min-width:0}
+.kv{font-size:12.5px;color:var(--muted);overflow-wrap:anywhere}
+.code{font:600 11.5px ui-monospace,Menlo,Consolas,monospace;background:var(--soft);border-radius:10px;padding:8px 10px;overflow-x:auto;white-space:pre}
+.mini{border:2px solid var(--line);background:var(--bg);color:var(--fg);border-radius:99px;padding:6px 12px;font:800 12px var(--font);cursor:pointer}
+.mini.y{background:var(--yellow);color:var(--on-yellow)}
+.done{text-align:center;align-items:center}
+.done .big{font-size:40px;line-height:1}
+.ref{font:800 13px ui-monospace,Menlo,monospace;background:var(--soft);padding:3px 10px;border-radius:99px}
+.note{font-size:12px;color:var(--muted);background:var(--soft);border-radius:12px;padding:8px 10px}
+[hidden]{display:none!important}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+select{width:100%;border:2px solid var(--line);border-radius:14px;padding:11px 12px;font:600 14px var(--font);background:var(--bg);color:var(--fg)}
+.chip:disabled,input:disabled,select:disabled{opacity:.4;cursor:not-allowed;background:var(--soft)}
+</style>
+
+<div class="app">
+  <div class="brand"><b>Miam Ride</b><span>Inscription boulangerie</span></div>
+  <div class="tabs" role="tablist">
+    <button role="tab" id="tabB" aria-selected="true">Côté boulanger</button>
+    <button role="tab" id="tabE" aria-selected="false">Côté équipe <span id="cnt"></span></button>
+  </div>
+
+  <section id="vB" class="app" style="gap:12px">
+    <div class="dots" id="dots"></div>
+
+    <div id="s1" class="app" style="gap:12px">
+      <div class="box">
+        <h2>Trouvez votre boulangerie</h2>
+        <p class="sub">Tapez son nom. On récupère l'adresse et les horaires depuis votre fiche Google : rien à ressaisir.</p>
+        <div><label for="q">Nom de la boulangerie</label><input id="q" type="search" placeholder="Ex. Fournil, Épi, Chevreuse…" autocomplete="off"></div>
+        <div class="list" id="fiches"></div>
+        <p class="src">Fiches d'exemple. La vraie recherche utilisera Google Places dès que la clé sera disponible.</p>
+        <p class="err" id="e1" role="alert"></p>
+      </div>
+      <div class="row"><button class="btn ghost" id="b1">Retour</button><button class="btn" id="n1">Continuer</button></div>
+    </div>
+
+    <div id="s2" class="app" style="gap:12px" hidden>
+      <div class="box">
+        <h2>Votre avantage cyclistes</h2>
+        <p class="sub">Ce que vous offrez à chaque cycliste qui s'arrête chez vous. Vous pourrez le changer plus tard.</p>
+        <div><label for="selPerk">Votre avantage pour chaque cycliste</label><select id="selPerk"></select></div>
+        <div id="buyW"><label for="selBuy">Achat minimum pour avoir ce cadeau</label><select id="selBuy"></select></div>
+        <div><label for="cond">Condition (facultatif)</label><input id="cond" type="text" maxlength="60" placeholder="Ex. sur présentation de l'appli"></div>
+        <div><label for="selLoy">Cadeau fidélité : au bout de combien de passages ?</label><select id="selLoy"></select></div>
+        <div><label for="selGift">Le cadeau offert à ce passage</label><select id="selGift"></select>
+          <input id="gift" type="text" maxlength="50" placeholder="Ex. une baguette tradition offerte" style="margin-top:6px" hidden></div>
+        <div class="pv"><small>Ce que verra le cycliste</small><b id="pvName">—</b><span class="perk" id="pvPerk">—</span><span class="sub" id="pvCond"></span><span class="sub" id="pvLoy"></span></div>
+        <p class="err" id="e2" role="alert"></p>
+      </div>
+      <div class="row"><button class="btn ghost" id="b2">Retour</button><button class="btn" id="n2">Envoyer ma demande</button></div>
+    </div>
+
+    <div id="s3" class="app" style="gap:12px" hidden>
+      <div class="box">
+        <h2>Vos coordonnées</h2>
+        <p class="sub">Pour vous rappeler et activer votre compte.</p>
+        <div><label for="nom">Nom du gérant</label><input id="nom" type="text" autocomplete="name"></div>
+        <div><label for="mail">E-mail</label><input id="mail" type="email" autocomplete="email"></div>
+        <div><label for="tel">Téléphone</label><input id="tel" type="tel" autocomplete="tel" placeholder="06 12 34 56 78"></div>
+        <label class="check" for="cgu"><input type="checkbox" id="cgu"><span>J'accepte les conditions d'utilisation et je suis bien le gérant de cette boulangerie.</span></label>
+        <p class="note">Essai gratuit pendant la période de lancement. Aucun paiement n'est demandé aujourd'hui.</p>
+        <p class="err" id="e3" role="alert"></p>
+      </div>
+      <div class="row"><button class="btn" id="n3">Continuer</button></div>
+    </div>
+
+    <div id="s4" class="box done peach" hidden>
+      <div class="big" aria-hidden="true">🥐</div>
+      <h2>Demande reçue</h2>
+      <p>Merci <b id="dNom"></b>. On vous rappelle sous 48 h pour vérifier votre demande et activer <b id="dBak"></b>.</p>
+      <span class="ref" id="dRef"></span>
+      <p class="sub">Pendant l'appel, on vous demandera quelques photos de la vitrine et de vos produits. On s'occupe du reste.</p>
+      <button class="btn ghost" id="again">Inscrire une autre boulangerie</button>
+    </div>
+  </section>
+
+  <section id="vE" class="app" style="gap:12px" hidden>
+    <div class="box peach"><h2>Demandes à valider</h2><p class="sub">Appeler le gérant, vérifier qu'il est bien le gérant, récupérer les photos, puis activer. L'activation ajoute l'identifiant Google à la table des partenaires.</p></div>
+    <div class="chips" id="flt"></div>
+    <div class="list" id="reqs"></div>
+    <button class="mini" id="reset">Remettre les exemples</button>
+  </section>
+</div>
+
+<script>
+const FICHES=[
+ {id:'ChIJ_exemple_01',name:'Le Fournil des Trois Épis',addr:'12 rue de la Paroisse, Versailles',hours:'Mar–Dim 7h–19h30'},
+ {id:'ChIJ_exemple_02',name:'Boulangerie du Vieux Moulin',addr:'4 place du Marché, Chevreuse',hours:'Lun–Sam 6h45–19h30, Dim 7h–13h'},
+ {id:'ChIJ_exemple_03',name:'Maison Pétrin & Fils',addr:'27 Grande Rue, Saint-Rémy-lès-Chevreuse',hours:'Mer–Lun 7h–19h'},
+ {id:'ChIJ_exemple_04',name:'Au Pain des Cyclistes',addr:'8 avenue de la Mairie, Dampierre-en-Yvelines',hours:'Mar–Sam 7h–13h30, 15h30–19h30'},
+ {id:'ChIJ_exemple_05',name:'La Mie Dorée',addr:'3 rue des Écoles, Magny-les-Hameaux',hours:'Lun–Sam 6h30–20h'}
+];
+const PERKS=[
+ {k:'Une viennoiserie offerte',s:'Pour un achat, jamais seule',buy:1},
+ {k:'Un café offert',s:'Pour un achat',buy:1},
+ {k:'Une boisson offerte',s:'Pour un achat',buy:1},
+ {k:'−10 % sur la pause',s:'Sur le ticket du cycliste, donc déjà lié à un achat',buy:0}
+];
+const BUYS=['dès 3 € d’achat','dès 5 € d’achat','dès 8 € d’achat','pour un pain acheté'];
+let buy=null;
+const KEY='mr_inscr_v1';
+const $=s=>document.querySelector(s);
+const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const SEED=()=>[
+ {ref:'MR-0007',fiche:FICHES[1],perk:'Un café offert dès 3 € d’achat',loy:{n:8,gift:'une baguette offerte'},cond:'',cats:['Pains','Viennoiseries'],nom:'Sophie Marchand (exemple)',mail:'exemple@exemple.fr',tel:'06 00 00 00 00',st:'wait',at:'Hier, 18:20'},
+ {ref:'MR-0006',fiche:FICHES[3],perk:'Une viennoiserie offerte dès 5 € d’achat',loy:{n:10,gift:'un café et une viennoiserie offerts'},cond:'sur présentation de l’appli',cats:['Viennoiseries','Sandwichs'],nom:'Karim Benali (exemple)',mail:'exemple@exemple.fr',tel:'06 00 00 00 00',st:'call',at:'Il y a 2 jours'}
+];
+const LOYN=[5,8,10],LOYG=['Une viennoiserie','Une baguette','Un café et une viennoiserie','Une pâtisserie'];
+let loyN=null,reqs=[],flt='all',F=null,perk=null,step=1;
+function load(){try{const r=JSON.parse(localStorage.getItem(KEY));if(Array.isArray(r)){reqs=r;return}}catch(e){}reqs=SEED()}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(reqs))}catch(e){}}
+function dots(){const L=['Contact','Boulangerie','Avantage'];$('#dots').innerHTML=L.map((t,i)=>`<i class="${i+1<step?'done':i+1===step?'on':''}">${i+1<step?'✓':i+1}</i>`).join('')+`<span>${step<=3?L[step-1]:'Terminé'}</span>`;$('#dots').hidden=step>3}
+const ORDER=[3,1,2,4];
+function go(n){step=n;[1,2,3,4].forEach(i=>$('#s'+i).hidden=i!==ORDER[n-1]);dots();window.scrollTo({top:0})}
+function drawFiches(){const q=$('#q').value.trim().toLowerCase(),L=FICHES.filter(f=>!q||(f.name+' '+f.addr).toLowerCase().includes(q));
+ $('#fiches').innerHTML=L.length?L.map(f=>`<button type="button" class="fiche" data-id="${f.id}" aria-pressed="${F&&F.id===f.id}"><b>${esc(f.name)}</b><small>${esc(f.addr)}</small><small>${esc(f.hours)}</small></button>`).join(''):'<p class="sub">Aucune fiche trouvée. Essayez un autre nom ou une ville.</p>';
+ $('#fiches').querySelectorAll('.fiche').forEach(b=>b.onclick=()=>{F=FICHES.find(f=>f.id===b.dataset.id);$('#e1').textContent='';drawFiches()})}
+function drawLoy(){$('#loyN').innerHTML=LOYN.map(n=>`<button type="button" class="chip" data-n="${n}" aria-pressed="${loyN===n}">${n} passages</button>`).join('');
+ $('#loyN').querySelectorAll('.chip').forEach(b=>b.onclick=()=>{loyN=+b.dataset.n;$('#e2').textContent='';drawLoy();pv()});
+ $('#loyG').innerHTML=LOYG.map(g=>`<button type="button" class="chip">${g}</button>`).join('');
+ $('#loyG').querySelectorAll('.chip').forEach(b=>b.onclick=()=>{$('#gift').value=b.textContent+' offerte';$('#e2').textContent='';pv()})}
+const full=()=>{const P=PERKS.find(x=>x.k===perk);return perk?(P&&P.buy&&buy?perk+' '+buy:perk):null};
+function drawBuys(){const P=PERKS.find(x=>x.k===perk);$('#buyW').hidden=!(P&&P.buy);
+ $('#buys').innerHTML=BUYS.map(b=>`<button type="button" class="chip" aria-pressed="${buy===b}">${b}</button>`).join('');
+ $('#buys').querySelectorAll('.chip').forEach(c=>c.onclick=()=>{buy=c.textContent;$('#e2').textContent='';drawBuys();pv()})}
+function drawOpts(){$('#opts').innerHTML=PERKS.map(p=>`<button type="button" class="opt" data-k="${esc(p.k)}" aria-pressed="${perk===p.k}"><span>${esc(p.k)}<br><small class="sub" style="font-weight:400">${esc(p.s)}</small></span></button>`).join('');
+ $('#opts').querySelectorAll('.opt').forEach(b=>b.onclick=()=>{perk=b.dataset.k;$('#e2').textContent='';drawOpts();drawBuys();pv()});}
+function pv(){$('#pvName').textContent=F?F.name:'—';$('#pvPerk').textContent=full()||'Choisissez un avantage';$('#pvCond').textContent=$('#cond').value.trim();const g=$('#gift').value.trim();$('#pvLoy').textContent=loyN&&g?'Au '+loyN+'e passage : '+g:'Cadeau fidélité : à définir'}
+$('#q').oninput=drawFiches;$('#cond').oninput=pv;$('#gift').oninput=()=>{$('#e2').textContent='';pv()};
+$('#n1').onclick=()=>{if(!F){$('#e1').textContent='Choisissez votre boulangerie dans la liste.';return}pv();drawOpts();drawBuys();drawLoy();go(3)};
+$('#b2').onclick=()=>go(2);
+$('#b1').onclick=()=>go(1);
+$('#n2').onclick=()=>{if(!perk){$('#e2').textContent='Choisissez l’avantage que vous offrez aux cyclistes.';return}
+ {const P=PERKS.find(x=>x.k===perk);if(P.buy&&!buy){$('#e2').textContent='Indiquez l’achat minimum : le cadeau n’est offert qu’avec un achat.';return}}
+ if(!loyN||!$('#gift').value.trim()){$('#e2').textContent='Choisissez le nombre de passages et le cadeau fidélité.';return}sendReq()};
+function checkContact(){const nom=$('#nom').value.trim(),mail=$('#mail').value.trim(),tel=$('#tel').value.trim(),e=$('#e3');
+ if(!nom){e.textContent='Indiquez votre nom.';$('#nom').focus();return null}
+ if(!/^\S+@\S+\.\S+$/.test(mail)){e.textContent='Cette adresse e-mail n’est pas valide.';$('#mail').focus();return null}
+ if(tel.replace(/\D/g,'').length<10){e.textContent='Indiquez un numéro à 10 chiffres pour qu’on puisse vous rappeler.';$('#tel').focus();return null}
+ if(!$('#cgu').checked){e.textContent='Cochez la case pour envoyer la demande.';return null}
+ e.textContent='';return{nom,mail,tel}}
+function sendReq(){const{nom,mail,tel}=checkContact()||{};if(!nom)return;const n=reqs.reduce((m,r)=>Math.max(m,+r.ref.slice(3)),7)+1,ref='MR-'+String(n).padStart(4,'0');
+ reqs.unshift({ref,fiche:F,perk:full(),loy:{n:loyN,gift:$('#gift').value.trim()},cond:$('#cond').value.trim(),cats:[],nom,mail,tel,st:'wait',at:'À l’instant'});save();
+ $('#dNom').textContent=nom.split(' ')[0];$('#dBak').textContent=F.name;$('#dRef').textContent='Référence '+ref;go(4);drawE()}
+$('#n3').onclick=()=>{if(checkContact())go(2)};
+$('#again').onclick=()=>{F=null;perk=null;buy=null;loyN=null;['q','cond','gift'].forEach(i=>$('#'+i).value='');drawFiches();go(2)};
+/* côté équipe */
+const ST={wait:['À appeler','b-wait'],call:['Appelé, à activer','b-call'],ok:['Active','b-ok'],no:['Refusée','b-no']};
+function drawE(){const c=reqs.filter(r=>r.st==='wait'||r.st==='call').length;$('#cnt').textContent=c?'('+c+')':'';
+ const FL=[['all','Toutes'],['wait','À appeler'],['call','À activer'],['ok','Actives']];
+ $('#flt').innerHTML=FL.map(([k,t])=>`<button type="button" class="chip" data-f="${k}" aria-pressed="${flt===k}">${t}</button>`).join('');
+ $('#flt').querySelectorAll('.chip').forEach(b=>b.onclick=()=>{flt=b.dataset.f;drawE()});
+ const L=reqs.filter(r=>flt==='all'||r.st===flt);
+ $('#reqs').innerHTML=L.length?L.map(r=>{const s=ST[r.st];
+  const act=r.st==='wait'?`<button class="mini y" data-a="call" data-r="${r.ref}">Appel fait</button><button class="mini" data-a="no" data-r="${r.ref}">Refuser</button>`:r.st==='call'?`<button class="mini y" data-a="ok" data-r="${r.ref}">Activer</button><button class="mini" data-a="no" data-r="${r.ref}">Refuser</button>`:'';
+  const code=r.st==='ok'?`<div class="code">PARTNERS["${esc(r.fiche.id)}"] = {\n  perk: "${esc(r.perk)}${r.cond?' ('+esc(r.cond)+')':''}",\n  loyalty: {every: ${r.loy.n}, gift: "${esc(r.loy.gift)}"},\n  cats: ${esc(JSON.stringify(r.cats))}\n}</div>`:'';
+  return `<div class="box req"><header><div><h3>${esc(r.fiche.name)}</h3><div class="kv">${esc(r.fiche.addr)}</div></div><span class="badge ${s[1]}">${s[0]}</span></header>
+  <div class="kv"><b>${esc(r.perk)}</b>${r.cond?' · '+esc(r.cond):''}<br>Fidélité : ${r.loy.n} passages → ${esc(r.loy.gift)}<br>Produits : à renseigner par l’équipe</div>
+  <div class="kv">${esc(r.nom)} · ${esc(r.tel)} · ${esc(r.mail)}<br>${esc(r.ref)} · ${esc(r.at)}</div>${code}
+  ${act?`<div class="chips">${act}</div>`:''}</div>`}).join(''):'<p class="sub">Aucune demande dans cette liste.</p>';
+ $('#reqs').querySelectorAll('[data-a]').forEach(b=>b.onclick=()=>{const r=reqs.find(x=>x.ref===b.dataset.r);r.st=b.dataset.a;save();drawE()})}
+$('#reset').onclick=()=>{reqs=SEED();save();drawE()};
+function tab(e){$('#vB').hidden=e;$('#vE').hidden=!e;$('#tabB').setAttribute('aria-selected',!e);$('#tabE').setAttribute('aria-selected',e);if(e)drawE()}
+$('#tabB').onclick=()=>tab(false);$('#tabE').onclick=()=>tab(true);
+load();drawFiches();drawOpts();go(1);drawE();
+/* version menus déroulants : remplace les boutons de l'écran 2 */
+function opt(v,t,sel){return `<option value="${esc(v)}"${sel?' selected':''}>${esc(t)}</option>`}
+function drawOpts(){$('#selPerk').innerHTML=opt('','Choisir un avantage…',!perk)+PERKS.map(p=>opt(p.k,p.k,perk===p.k)).join('');
+ $('#selPerk').onchange=e=>{perk=e.target.value||null;$('#e2').textContent='';drawBuys();pv()}}
+function drawBuys(){const P=PERKS.find(x=>x.k===perk);$('#buyW').hidden=!(P&&P.buy);
+ $('#selBuy').innerHTML=opt('','Choisir un seuil…',!buy)+BUYS.map(b=>opt(b,b,buy===b)).join('');
+ $('#selBuy').onchange=e=>{buy=e.target.value||null;$('#e2').textContent='';pv()}}
+function drawLoy(){$('#selLoy').innerHTML=opt('','Choisir…',!loyN)+LOYN.map(n=>opt(n,n+' passages',loyN===n)).join('');
+ $('#selLoy').onchange=e=>{loyN=e.target.value?+e.target.value:null;$('#e2').textContent='';pv()};
+ const g=$('#gift').value.trim(),pre=LOYG.find(x=>x+' offerte'===g),cur=!g?'':pre?pre:'autre';
+ $('#selGift').innerHTML=opt('','Choisir un cadeau…',cur==='')+LOYG.map(x=>opt(x,x,cur===x)).join('')+opt('autre','Autre cadeau…',cur==='autre');
+ $('#gift').hidden=cur!=='autre';
+ $('#selGift').onchange=e=>{const v=e.target.value;$('#e2').textContent='';if(v==='autre'){$('#gift').value='';$('#gift').hidden=false;$('#gift').focus()}else{$('#gift').hidden=true;$('#gift').value=v?v+' offerte':''}pv()}}
+/* le cadeau fidélité reste grisé tant que le nombre de passages n'est pas choisi */
+function greyGift(){const off=!loyN;['#gift','#selGift'].forEach(q=>{const e=$(q);if(e)e.disabled=off});document.querySelectorAll('#loyG .chip').forEach(c=>c.disabled=off)}
+{const pv0=pv,dl0=drawLoy;pv=function(){pv0();greyGift()};drawLoy=function(){dl0();greyGift()}}
+</script>
