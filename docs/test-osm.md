@@ -26,3 +26,8 @@ Principe : même mécanisme que la couche Google, avec OpenRouteService (tracé 
 - Les boucles sont-elles roulables et calmes autour de Versailles / vallée de Chevreuse ? Forme des boucles (cercle de points de passage) correcte ?
 - Le % de routes calmes est-il cohérent avec ton ressenti ?
 - Qualité des boulangeries et horaires OSM vs Google.
+
+## Versions récentes (nov. 2026)
+- Vers 10 : 5 serveurs Overpass en course, 3 tours, mémoire locale 24 h des boulangeries, nouvel essai automatique, message d'erreur visible.
+- Vers 11 : préchauffage des boulangeries (chargées dès le départ connu), tracé affiché dès qu'il est calculé, tracé coloré (noir = voie calme, rouge = route principale), détail « voies cyclables / routes principales / chemins non revêtus », horaires OSM mieux lus (listes de jours, plages, Sa-Mo), doublons et commerces sans nom écartés.
+- Le suivi de version se fait désormais dans GitHub (`alanbtl/Miam-ride`).
