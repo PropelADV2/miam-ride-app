@@ -1575,6 +1575,16 @@ setTimeout(osmWarm,1500);
  on.onchange=()=>{OSMS.set('mr_osm',on.value);OSMC.key=null;OSMC.k2=null;S.gen=false;S.picks=[];S.loopG=null;S.routeG=null;try{showRes();drawMap(true)}catch(e){}msg.textContent=on.value==='1'&&!key.value?'Ajoute ta clé':'';setTimeout(osmWarm,300)};
  key.onchange=()=>{OSMS.set('mr_orskey',key.value.trim());msg.textContent=''};
  box.querySelector('#osm_test').onclick=async()=>{OSMS.set('mr_orskey',key.value.trim());msg.textContent='Test…';const c=gStart();try{const r=await RoutingORS.compute(c,offKm(c,1.5,0),[]);msg.textContent='OK : '+r.km.toFixed(1).replace('.',',')+' km'}catch(e){msg.textContent=e.message}}})();
+/* ---------- départ : adresse par défaut claire, et bouton « Me localiser » avec vrais messages ---------- */
+(()=>{const f=$('#from');if(f&&f.value==='Ma position'){f.value='Rue de la Paroisse, Versailles';f.placeholder='Tape ton adresse de départ'}
+ const g=document.querySelector('.gps');if(!g)return;
+ g.onclick=()=>{if(!navigator.geolocation){osmToast('Localisation indisponible ici : tape ton adresse dans le champ de départ.');return}
+  osmToast('Localisation en cours…');
+  navigator.geolocation.getCurrentPosition(async p=>{C0=[p.coords.longitude,p.coords.latitude];S.gen=false;S.picks=[];S.loopG=null;S.routeG=null;OSMC.key=null;OSMC.k2=null;f.value='Ma position';
+    try{const r=await fetchT('https://api-adresse.data.gouv.fr/reverse/?lon='+C0[0]+'&lat='+C0[1],{},6000),j=await r.json(),l=j.features&&j.features[0]&&j.features[0].properties.label;if(l)f.value=l}catch(e){}
+    try{showRes();drawMap(true)}catch(e){}osmToast('Départ : '+f.value);osmWarm()},
+   e=>{osmToast(e&&e.code===1?'Localisation refusée. Ouvre le fichier depuis un vrai site web (https) ou tape ton adresse dans le champ de départ.':e&&e.code===3?'La localisation met trop de temps. Tape ton adresse dans le champ de départ.':'Position introuvable. Tape ton adresse dans le champ de départ.')},
+   {enableHighAccuracy:false,timeout:10000,maximumAge:60000})}})();
 if(osmOn())try{drawMap(true)}catch(e){}
 </script>
 </body>
