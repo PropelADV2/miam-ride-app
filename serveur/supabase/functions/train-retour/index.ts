@@ -53,7 +53,7 @@ Deno.serve(async (req) => {
 
   const nav = dt.replace(/[-:]/g, "") + "00"; // 20261108T175500
   const url = `${BASE}/journeys?from=${from.lng};${from.lat}&to=${to.lng};${to.lat}` +
-    `&datetime=${nav}&datetime_represents=departure&count=3&data_freshness=realtime`;
+    `&datetime=${nav}&datetime_represents=departure&min_nb_journeys=5&count=6&data_freshness=realtime`;
   let r: Response;
   try { r = await fetch(url, { headers: { apiKey: KEY, Accept: "application/json" } }); }
   catch { return json({ ok: false, reason: "prim_injoignable" }, 502); }
@@ -81,5 +81,10 @@ Deno.serve(async (req) => {
       })),
     };
   }).filter((t: any) => t.depart_gare && t.arrivee);
-  return json({ ok: true, trajets });
+  // un seul trajet par heure de départ, du plus tôt au plus tard
+  const vus = new Set<string>();
+  const uniques = trajets
+    .sort((x: any, y: any) => (x.depart_gare.date + x.depart_gare.min.toString().padStart(4, "0")).localeCompare(y.depart_gare.date + y.depart_gare.min.toString().padStart(4, "0")))
+    .filter((t: any) => { const k = t.depart_gare.date + t.depart_gare.min; if (vus.has(k)) return false; vus.add(k); return true; });
+  return json({ ok: true, trajets: uniques });
 });
