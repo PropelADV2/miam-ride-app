@@ -1,0 +1,24 @@
+# Versions OSM 12 à 22 (nov. 2026)
+
+Moteur : OpenRouteService (profil cycling-road), Overpass (boulangeries, gares), MapLibre + OpenFreeMap (carte), Base Adresse Nationale + Photon (adresses). Chaque version = `Miam ride osm - vers N.html` ; scripts de build et tests dans le dépôt `alanbtl/Miam-ride` (`outils/`, `outils/tests/`).
+
+| Version | Apport |
+|---|---|
+| 12 | OSM par défaut. 3 boucles candidates, la mieux notée selon l'ambiance est gardée (calme visé : 85 / 65 / 45 %). Évitement des routes principales. Ligne de contrôle « objectif atteint ». Départ par défaut + localisation avec messages clairs. |
+| 13 | Boulangeries cherchées d'abord, boucles notées selon les boulangeries ouvertes dans les fenêtres de pause. Mode ville / campagne. Statuts (validée, notée, non vérifiée, à éviter) et écran de validation (Profil › Compte). Filtre des chaînes. |
+| 14 | « Vers un lieu » fonctionnel : recherche d'adresse, boucle qui passe par le lieu. |
+| 15 | Export GPX réel (tracé, altitude, départ, pauses, arrivée), partage ou téléchargement. |
+| 16-17 | Suggestions d'adresse personnalisées (départ et arrivée), attente de la résolution avant génération, ligne « Passage par ». |
+| 18 | Recherche d'arrivée sans biais de proximité (villes lointaines). Bandeau « mode démo » quand la clé manque (clé stockée par fichier). |
+| 19 | Boulangeries proposées selon leur position réelle sur le tracé (pas trop tôt). |
+| 20 | Ligne de contrôle du nombre de boulangeries à chaque étape. |
+| 21-22 | Ride and train, temps A (voir `ride-and-train.md`). |
+
+## Décisions associées
+- Full OSM, Google abandonné (`integration-google.md`).
+- Notes de boulangeries : avis juridique d'abord (`questions-juridiques-notation.md`).
+- Points d'eau en attente ; espace communautaire en feuille de route (`feuille-de-route-communaute.md`).
+- Cafés (`amenity=cafe`) : prochaine étape, filtre Boulangerie / Café / Les deux.
+
+## Limites
+Tout a été vérifié avec des services simulés ; les vrais services (ORS, Overpass, Photon, BAN) ne sont pas joignables depuis l'environnement de développement. Le test réel est à faire sur l'appareil de l'utilisateur.

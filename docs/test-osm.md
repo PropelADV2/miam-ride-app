@@ -1,33 +1,32 @@
-# Test avec de vraies données OpenStreetMap (version « osm-reel »)
+# Version OSM de test (fichiers « Miam ride osm - vers N.html »)
 
-Fichier : `miam-ride-osm-reel.html` (copie de la version OSM ; les maquettes d'origine sont intactes).
-Principe : même mécanisme que la couche Google, avec OpenRouteService (tracé vélo) + Overpass (boulangeries) + Nominatim (adresse de départ).
+**Version actuelle : vers 22** (`Miam ride osm - vers 22.html`, copie dans le dépôt GitHub `alanbtl/Miam-ride`, dossier `maquettes/`). Les maquettes d'origine sont intactes. Le détail de chaque version est dans `osm-versions-12-22.md`. Depuis la version 12, **OSM est actif par défaut** dès qu'une clé est présente.
 
 ## Étapes
-1. Créer un compte gratuit sur openrouteservice.org (e-mail perso), puis Dashboard › Request a token › type « Free », nommer la clé, copier la clé.
-2. Télécharger `miam-ride-osm-reel.html` et l'ouvrir dans Chrome ou Safari (double-clic). Il doit être ouvert en fichier local, pas en artifact (appels externes bloqués).
-3. Profil › Compte › « Test OSM (vraies routes) » : coller la clé, passer sur « Activés », toucher « Tester la clé » → « OK : 1,9 km ».
-4. Accueil : départ = « Me localiser » (autoriser la position) ou taper une adresse puis valider. Par défaut : Versailles.
-5. Choisir la distance, puis « Je choisis où je me régale » : le tracé de boucle s'affiche sur la vraie carte, avec les vraies boulangeries autour.
-6. Choisir une boulangerie : l'itinéraire final est recalculé avec la pause. La distance, le dénivelé et le % de routes calmes affichés viennent du tracé réel.
+1. Créer un compte gratuit sur openrouteservice.org (e-mail personnel), puis Dashboard › « Request a token » › type « Free », nommer la clé et la copier. Ne jamais la coller dans une conversation ou dans le code.
+2. Ouvrir le fichier `Miam ride osm - vers N.html` dans Chrome ou Safari (double-clic). Il doit être ouvert en fichier local, pas en artifact (appels externes bloqués).
+3. **Coller la clé dans le bandeau jaune de l'accueil** (« Mode démo… »), puis « Activer ». Elle est enregistrée dans le navigateur, **fichier par fichier** : à refaire à chaque nouvelle version tant que l'appli n'est pas hébergée à une adresse fixe. Autre endroit : Profil › Compte.
+4. Départ : taper une adresse (suggestions) ou « Me localiser » (peut échouer sur un fichier local : taper l'adresse). Par défaut : rue de la Paroisse, Versailles.
+5. Choisir le mode (Boucle, Vers un lieu, Ride and train, Laisse Mamie choisir), l'ambiance et la distance, puis générer.
+6. Choisir les boulangeries, puis le résumé : télécharger le GPX.
 
 ## Ce qui est réel / simulé
-- Réel : tracé vélo (profil cycling-road, évite bacs et escaliers), distance, dénivelé, % de routes calmes (estimé d'après le type de voie ORS : rue, chemin, piste, voie cyclable = calme ; route nationale/départementale = non calme), boulangeries OSM (nom, adresse, horaires quand renseignés).
-- Simulé / absent : notes, avis, photos, partenaires, récompenses. Le résumé du tracé et le profil altimétrique du résumé restent ceux de la maquette.
+- **Réel** : tracé vélo (OpenRouteService, profil cycling-road), distance, dénivelé, % de routes calmes (type de voie), boulangeries OpenStreetMap (nom, adresse, horaires quand renseignés), gares OpenStreetMap, adresses (Base Adresse Nationale + Photon), GPX.
+- **Simulé / absent** : notes, avis, photos, partenaires, récompenses (données de démonstration). Les horaires de trains ne sont pas affichés (Ride and train temps A).
 
 ## Limites connues
-- Écrit sans pouvoir appeler les vrais services depuis notre environnement (réseau bloqué) : testé avec des réponses simulées. Premier vrai test à faire.
-- Quotas gratuits ORS à vérifier sur leur site (environ 40 requêtes/minute) ; ≈ 4 appels par tracé.
-- Overpass : service public partagé, usage de test uniquement. Horaires OSM souvent incomplets.
-- Nominatim : 1 requête/seconde maximum, usage de test uniquement.
-- Pour la production : serveur à nous (clé ORS hors de la page), instance dédiée ou service payant, cache des boulangeries dans notre base.
+- Les tests automatiques utilisent des réponses simulées ; le premier vrai test des fonctions récentes est à faire sur l'appareil de l'utilisateur.
+- Quotas gratuits ORS à vérifier (≈ 40 requêtes/minute, ≈ 2 000/jour). Une génération consomme 5 à 8 appels (3 boucles candidates + recalcul) : le quota du jour peut être atteint rapidement en test.
+- Overpass : service public partagé, usage de test uniquement ; cinq miroirs en course, cache de 24 h dans le navigateur. Horaires et étiquetage OSM incomplets (pâtisseries, boulangeries absentes).
+- Pour la production : serveur à nous (clé ORS hors de la page), base de boulangeries à nous, hébergement fixe.
 
-## Questions à trancher après le test
-- Les boucles sont-elles roulables et calmes autour de Versailles / vallée de Chevreuse ? Forme des boucles (cercle de points de passage) correcte ?
-- Le % de routes calmes est-il cohérent avec ton ressenti ?
-- Qualité des boulangeries et horaires OSM vs Google.
+## Questions à trancher après les tests
+- Les boucles sont-elles roulables et calmes autour de Versailles / vallée de Chevreuse ? L'ambiance est-elle bien respectée ?
+- Les boulangeries proposées sont-elles pertinentes (ligne de contrôle sous le tracé : nombre à chaque étape) ?
+- Le GPX s'ouvre-t-il bien sur une Coros / un GPS (trace, pauses, altitude) ?
+- Les gares proposées pour Ride and train sont-elles justes ?
 
-## Versions récentes (nov. 2026)
-- Vers 10 : 5 serveurs Overpass en course, 3 tours, mémoire locale 24 h des boulangeries, nouvel essai automatique, message d'erreur visible.
-- Vers 11 : préchauffage des boulangeries (chargées dès le départ connu), tracé affiché dès qu'il est calculé, tracé coloré (noir = voie calme, rouge = route principale), détail « voies cyclables / routes principales / chemins non revêtus », horaires OSM mieux lus (listes de jours, plages, Sa-Mo), doublons et commerces sans nom écartés.
-- Le suivi de version se fait désormais dans GitHub (`alanbtl/Miam-ride`).
+## Historique des versions
+- **Vers 10-11 (nov.)** : 5 serveurs Overpass en course, cache 24 h, préchauffage des boulangeries, tracé coloré (noir = voie calme, rouge = route principale), détail des voies cyclables, routes principales et chemins non revêtus, horaires OSM mieux lus.
+- **Vers 12 à 22 (nov.)** : voir `osm-versions-12-22.md`.
+- Le suivi de version se fait dans GitHub (`alanbtl/Miam-ride`).

@@ -1,22 +1,24 @@
-# Intégration Google (décision : tout repose sur Google)
+# Intégration Google (mise de côté le 04/11/2026 : on passe en full OSM)
 
-**Décision (31/10/2026)** : le cœur de l'appli, ce sont les choix de boulangeries. Les notes, avis, photos et horaires viennent donc de Google, et le tracé aussi (Routes API, mode vélo). Zone de test : Versailles + 50 km ; cœur de lancement : Versailles + vallée de Chevreuse.
+> **Statut : abandonnée pour les tracés et les boulangeries.** Décision du 04/11/2026 : full OpenStreetMap. La décision du 31/10 « tout repose sur Google » est abrogée. Ce document est conservé pour mémoire et pour un éventuel usage ciblé (notes des boulangeries, sous réserve d'un avis juridique).
 
-## État du code (maquette)
+## Pourquoi on y renonce
+- Le coût monte avec chaque requête. Estimation d'une génération « naïve » (3 itinéraires + 4 recherches de lieux + détails) : environ 0,20 à 0,25 $ par tracé. Trop risqué pour le modèle économique (appli gratuite pour les cyclistes, abonnement payé par les boulangeries).
+- Les conditions de Google limitent la conservation des données et obligent à les afficher sur une carte Google avec attribution : incompatible avec notre carte OSM.
+- Google ne fournit ni boucles ni « routes calmes » : on devait de toute façon fabriquer ces critères nous-mêmes.
+
+## Ce qui remplace Google
+Voir `osm-versions-12-22.md` : OpenRouteService (tracé), Overpass (boulangeries), MapLibre + OpenFreeMap (carte), Base Adresse Nationale + Photon (adresses).
+
+## Ce que Google pourrait encore apporter (hypothèse, non décidée)
+- **Notes et nombre d'avis** pour amorcer, via l'API officielle uniquement, sur les 4 à 6 boulangeries réellement proposées (pas pour les tracés). Ordre de grandeur indicatif : environ 20 $ pour 1 000 consultations de fiche avec note, soit 10 à 30 $ par ville pour une passe d'amorçage (tarifs à confirmer sur la page officielle de Google).
+- **À ne pas faire** : recopier les notes Google dans notre base, ni appliquer une règle mécanique « validée si ≥ 4/5 sur Google ».
+- Dépend de l'avis juridique : `questions-juridiques-notation.md`.
+
+## Historique : état du code d'origine (31/10, maquettes d'origine)
 Un seul réglage : `PLACES_CONFIG.provider = 'demo' | 'google'` (+ `googleKey`, `mapsKey`, `mapId`).
-- **Tracé** : `RoutingGoogle` (Routes API `computeRoutes`, `travelMode: BICYCLE`, évite autoroutes/péages/bacs). La boucle est fabriquée par nous : points de passage sur un cercle autour du départ, rayon ajusté jusqu'à la distance demandée (±5 km). Une fois les pauses choisies, nouveau calcul avec les pauses insérées dans l'ordre.
-- **Boulangeries** : Places API (New), `searchNearby` autour de 4 points de la boucle, avec note, nombre d'avis, horaires. Les horaires alimentent le calcul « ouvert à mon passage ».
-- **Partenaires** : table `PARTNERS` (identifiant Google du lieu → avantage, catégories). Seule donnée à nous.
-- **Cartes** : Google Maps JavaScript pour l'accueil (tracé + repères) et l'onglet Carte.
-- **Test** : uniquement avec des réponses Google simulées. **Jamais testé contre le vrai Google.**
-
-## À faire pour activer
-1. Projet Google Cloud + facturation ; activer Places API (New), Routes API, Maps JavaScript API.
-2. Clé Maps JS restreinte au domaine ; clé Places/Routes **côté serveur** (ne pas laisser dans la page).
-3. Budget et alertes de quota. Le coût dépend des champs demandés (`FieldMask`) : note et horaires coûtent plus cher que le nom seul.
-4. Relire les conditions Google : affichage des données Places sur une carte Google, durée de mise en cache, attributions.
-
-## Inconnues à vérifier sur Versailles / Chevreuse
-- Qualité du mode vélo de Google en France (pistes, chemins, côtes).
-- Google ne propose ni boucle, ni « routes calmes » : notre critère « calme » reste à construire (point d'entrée `calmHook`).
-- Nombre d'appels par tracé (≈ 3 itinéraires + 4 recherches) à mesurer pour chiffrer le coût.
+- **Tracé** : `RoutingGoogle` (Routes API `computeRoutes`, `travelMode: BICYCLE`). Boucle fabriquée par nous : points de passage sur un cercle autour du départ, rayon ajusté jusqu'à la distance demandée (±5 km).
+- **Boulangeries** : Places API (New), `searchNearby` autour de 4 points de la boucle.
+- **Partenaires** : table `PARTNERS` (identifiant du lieu → avantage, catégories). Seule donnée à nous.
+- **Cartes** : Google Maps JavaScript. **Jamais testé contre le vrai Google.**
+- La version OSM reprend le même mécanisme (mêmes points d'entrée `gOn`, `PLACES`, `RoutingGoogle`, `PlacesGoogle`) en redirigeant vers OSM quand `osmOn()` est vrai.
