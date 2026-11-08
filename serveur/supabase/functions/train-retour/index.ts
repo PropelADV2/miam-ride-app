@@ -74,6 +74,17 @@ Deno.serve(async (req) => {
       arrivee: arr,
       duree_min: Math.round((j.duration ?? 0) / 60),
       correspondances: j.nb_transfers ?? Math.max(0, pt.length - 1),
+      depart_trajet: parseDt(j.departure_date_time),
+      etapes: S.filter((x) => x.type !== "crow_fly" && (x.duration ?? 0) > 0).map((x) => ({
+        type: x.type, // public_transport, street_network, transfer, waiting
+        mode: x.mode ?? x.transfer_type ?? "",
+        de: x.from?.name ?? "",
+        a: x.to?.name ?? "",
+        min: Math.round((x.duration ?? 0) / 60),
+        mode_tc: x.display_informations?.commercial_mode ?? "",
+        ligne: x.display_informations?.code ?? "",
+        reseau: x.display_informations?.network ?? "",
+      })),
       lignes: pt.map((s) => ({
         mode: s.display_informations?.commercial_mode ?? "",
         ligne: s.display_informations?.code ?? s.display_informations?.label ?? "",
