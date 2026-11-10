@@ -3,7 +3,7 @@
 > **Changement majeur (04/11/2026) : on passe en full OpenStreetMap (tracés, boulangeries, carte). Google n'est plus utilisé pour les tracés.** Voir la section « Mise à jour du 08/11 » en bas, `osm-versions-12-22.md` et `integration-google.md`. Les paragraphes plus anciens qui parlent de « tout Google » sont conservés pour mémoire et signalés *(remplacé)*.
 
 ## Fichiers (maquettes, données fictives)
-- **Version de travail actuelle : `Miam ride osm - vers 29.html`** (aussi dans le dépôt GitHub `PropelADV2/miam-ride-app`, dossier `maquettes/osm-vers-29.html`). À ouvrir en fichier local (double-clic) : la clé OpenRouteService est à coller dans le bandeau jaune de l'accueil à chaque nouveau fichier.
+- **Version de travail actuelle : `Miam ride osm - vers 30.html`** (aussi dans le dépôt GitHub `PropelADV2/miam-ride-app`, dossier `maquettes/osm-vers-30.html`). À ouvrir en fichier local (double-clic) : la clé OpenRouteService est à coller dans le bandeau jaune de l'accueil à chaque nouveau fichier.
 - Accueil cycliste (hébergé, démo) : https://claude.ai/artifact/7E9BYKzrKy2JC9Tv6KBhEs
 - Introduction (intro toujours affichée) : https://claude.ai/artifact/1XtttXTYqTLrAt9HT2XYGQ
 - Espace boulangerie : https://claude.ai/artifact/AGJ92pXFzczKo9jQu613jL
@@ -109,7 +109,7 @@ Détail complet dans `osm-versions-12-22.md`. En résumé :
 - **Limites** : horaires seulement en Île-de-France ; Overpass public parfois saturé (429) ; logos officiels SNCF non utilisés (marque protégée).
 
 ## Prochaines étapes
-1. Cafés comme autre type de pause (filtre Boulangerie / Café / Les deux) : prochaine tâche.
+1. Cafés : fait (vers 30, filtre Boulangerie / Café / Les deux) ; à tester en réel. Prochaine tâche à choisir (points d'eau, pâtisseries, serveur / comptes).
 2. L'utilisateur teste en réel (vers 29), GPX sur Coros, localisation sur un site en https.
 3. Avis juridique sur les notes ; décision sur Google pour amorcer.
 4. Serveur + authentification (Supabase) ; hébergement fixe.

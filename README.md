@@ -13,7 +13,7 @@ Chaque fichier de `maquettes/` est une page HTML autonome : double-clic dans Chr
 | `introduction.html` | Idem avec l'écran d'introduction. |
 | `accueil-osm.html` | Même appli avec une vraie carte (MapLibre). |
 | `test-osm-reel.html` | Test avec de vraies données OpenStreetMap : tracé vélo (OpenRouteService), boulangeries (Overpass), adresse (Base Adresse Nationale). Demande une clé OpenRouteService gratuite, à saisir dans Profil › Compte › Test OSM. À ouvrir **en local** (pas en page hébergée). |
-| `osm-vers-12.html` à `osm-vers-29.html` | **Versions de travail OSM** (la dernière, `osm-vers-29.html`, est la version courante) : tracé réel, boulangeries, « Vers un lieu », GPX, Ride and train. Voir `docs/osm-versions-12-22.md` et `docs/test-osm.md`. Clé OpenRouteService à coller dans le bandeau de l'accueil, à chaque fichier. |
+| `osm-vers-12.html` à `osm-vers-30.html` | **Versions de travail OSM** (la dernière, `osm-vers-30.html`, est la version courante) : tracé réel, boulangeries, « Vers un lieu », GPX, Ride and train. Voir `docs/osm-versions-12-22.md` et `docs/test-osm.md`. Clé OpenRouteService à coller dans le bandeau de l'accueil, à chaque fichier. |
 | `espace-boulangerie.html` | L'espace commerçant. |
 | `inscription-boulangerie-v1.html`, `inscription-boulangerie-v2-menus.html` | Deux versions du parcours d'inscription d'une boulangerie. |
 | `styles-alternatifs.html` | Comparaison des 6 styles graphiques (gelés : on reste sur « Pop »). |
@@ -21,7 +21,7 @@ Chaque fichier de `maquettes/` est une page HTML autonome : double-clic dans Chr
 Mode présentation : ajouter `#demo` à l'adresse pour afficher les outils de simulation (heure, avance rapide…) ; `#nodemo` pour les masquer.
 
 ## Documentation (`docs/`)
-`etat-du-projet.md` (point d'étape), `osm-versions-12-22.md` (versions OSM 12 à 29), `ride-and-train.md`, `questions-juridiques-notation.md`, `feuille-de-route-communaute.md`, `integration-google.md`, `test-osm.md` (mode d'emploi du test OSM), `modele-economique.md`, `criteres-generation-traces.md`, `horaires-et-roulage.md`, `notation-produits.md`, `synchro-sorties-montre-gps.md`, `garage-50-velos.md`, `styles-alternatifs.md`, `feuille-de-route.html`.
+`etat-du-projet.md` (point d'étape), `osm-versions-12-22.md` (versions OSM 12 à 30), `ride-and-train.md`, `questions-juridiques-notation.md`, `feuille-de-route-communaute.md`, `integration-google.md`, `test-osm.md` (mode d'emploi du test OSM), `modele-economique.md`, `criteres-generation-traces.md`, `horaires-et-roulage.md`, `notation-produits.md`, `synchro-sorties-montre-gps.md`, `garage-50-velos.md`, `styles-alternatifs.md`, `feuille-de-route.html`.
 
 ## Outils (`outils/`)
 - `build_styles.py` : génère la page des styles alternatifs.

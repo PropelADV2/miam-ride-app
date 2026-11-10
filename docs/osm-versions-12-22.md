@@ -1,4 +1,4 @@
-# Versions OSM 12 à 29 (nov. 2026)
+# Versions OSM 12 à 30 (nov. 2026)
 
 Moteur : OpenRouteService (profil cycling-road), Overpass (boulangeries, gares), MapLibre + OpenFreeMap (carte), Base Adresse Nationale + Photon (adresses). Chaque version = `Miam ride osm - vers N.html` ; scripts de build et tests dans le dépôt `alanbtl/Miam-ride` (`outils/`, `outils/tests/`).
 
@@ -20,13 +20,14 @@ Moteur : OpenRouteService (profil cycling-road), Overpass (boulangeries, gares),
 | 27 | Carte condensée, pastilles de ligne colorées (pas les logos officiels), règles vélo retirées de l'affichage. |
 | 28 | « Détail du trajet » (étapes marche / train / correspondance) pour diagnostiquer les durées. |
 | 29 | Gares : nouvel essai si Overpass limite le débit (429), cache de 30 jours, moins de requêtes. |
+| 30 | **Cafés** (`amenity=cafe`) comme type de pause, avec le filtre « Type de pause » : Boulangerie (par défaut) / Café / Les deux. Cafés cherchés seulement si le filtre en veut ; sans nom, chaînes et bars-tabac exclus ; marqués « café » dans la liste ; même statuts que les boulangeries (non vérifiée par défaut). |
 
 ## Décisions associées
 - Full OSM, Google abandonné (`integration-google.md`).
 - Notes de boulangeries : avis juridique d'abord (`questions-juridiques-notation.md`).
 - Points d'eau en attente ; espace communautaire en feuille de route (`feuille-de-route-communaute.md`).
 - Serveur : projet Supabase (compte GitHub du projet), fonction `train-retour` qui garde le jeton PRIM (voir `serveur/README.md`).
-- Cafés (`amenity=cafe`) : prochaine étape, filtre Boulangerie / Café / Les deux.
+- Cafés : fait en vers 30 ; à affiner (pâtisseries, qualité des cafés, horaires).
 
 ## Limites
 Tout a été vérifié avec des services simulés ; les vrais services (ORS, Overpass, Photon, BAN) ne sont pas joignables depuis l'environnement de développement. Le test réel est à faire sur l'appareil de l'utilisateur.
