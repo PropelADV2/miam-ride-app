@@ -1,9 +1,9 @@
-# Miam Ride – état au 08/11/2026
+# Miam Ride – état au 10/11/2026
 
 > **Changement majeur (04/11/2026) : on passe en full OpenStreetMap (tracés, boulangeries, carte). Google n'est plus utilisé pour les tracés.** Voir la section « Mise à jour du 08/11 » en bas, `osm-versions-12-22.md` et `integration-google.md`. Les paragraphes plus anciens qui parlent de « tout Google » sont conservés pour mémoire et signalés *(remplacé)*.
 
 ## Fichiers (maquettes, données fictives)
-- **Version de travail actuelle : `Miam ride osm - vers 22.html`** (aussi dans le dépôt GitHub `alanbtl/Miam-ride`, dossier `maquettes/osm-vers-22.html`). À ouvrir en fichier local (double-clic) : la clé OpenRouteService est à coller dans le bandeau jaune de l'accueil à chaque nouveau fichier.
+- **Version de travail actuelle : `Miam ride osm - vers 29.html`** (aussi dans le dépôt GitHub `PropelADV2/miam-ride-app`, dossier `maquettes/osm-vers-29.html`). À ouvrir en fichier local (double-clic) : la clé OpenRouteService est à coller dans le bandeau jaune de l'accueil à chaque nouveau fichier.
 - Accueil cycliste (hébergé, démo) : https://claude.ai/artifact/7E9BYKzrKy2JC9Tv6KBhEs
 - Introduction (intro toujours affichée) : https://claude.ai/artifact/1XtttXTYqTLrAt9HT2XYGQ
 - Espace boulangerie : https://claude.ai/artifact/AGJ92pXFzczKo9jQu613jL
@@ -101,10 +101,17 @@ Détail complet dans `osm-versions-12-22.md`. En résumé :
 - **v19, v20** : boulangeries proposées selon leur **position réelle sur le tracé** (fenêtres de pause respectées), et ligne de contrôle du nombre de boulangeries à chaque étape.
 - **v21, v22** : **Ride and train, temps A** (`ride-and-train.md`) : gares OSM, aller avec pauses jusqu'à la gare, règles vélo au retour, toujours une gare proposée.
 
+## Mise à jour du 10/11/2026 — vers 23 à 29, serveur et GitHub
+- **Ride and train, temps B fait (vers 24-29)** : horaires de retour réels via PRIM (Île-de-France Mobilités) par une fonction Supabase qui garde le jeton. Carte de retour : gare, prochains trains avec pastille de ligne, autres gares, « Détail du trajet ». Le tracé va au lieu saisi, puis jusqu'à la gare (tronçon ajouté au GPX). Test réel OK (« 4 trajets »). Cas Versailles → Boulogne (3 h 09) à éclaircir.
+- **Règles vélo des trains** : retirées de l'affichage (décision du 09/11), le code reste.
+- **Compte du projet** : nouveau compte GitHub unique (`PropelADV2`), dépôt `miam-ride-app` (à passer en privé), compte Supabase relié. Ancien dépôt `alanbtl/Miam-ride` abandonné.
+- **Serveur** : dossier `serveur/` (fonction `train-retour`, README de mise en place). Prochain usage de Supabase : comptes, statuts de boulangeries partagés, notes QR.
+- **Limites** : horaires seulement en Île-de-France ; Overpass public parfois saturé (429) ; logos officiels SNCF non utilisés (marque protégée).
+
 ## Prochaines étapes
-1. L'utilisateur teste les versions 21 et 22 en réel, GPX sur Coros, localisation sur un site en https.
-2. Cafés comme autre type de pause (filtre Boulangerie / Café / Les deux).
+1. Cafés comme autre type de pause (filtre Boulangerie / Café / Les deux) : prochaine tâche.
+2. L'utilisateur teste en réel (vers 29), GPX sur Coros, localisation sur un site en https.
 3. Avis juridique sur les notes ; décision sur Google pour amorcer.
 4. Serveur + authentification (Supabase) ; hébergement fixe.
-5. Ride and train temps B (horaires de trains) et espace communautaire, après le serveur.
+5. Horaires hors Île-de-France (TER, grandes lignes) et espace communautaire.
 6. Points d'eau (en attente).
