@@ -380,6 +380,9 @@ header,#intro{background:var(--bg)}
 input::placeholder{color:var(--muted)}
 .xpb i,.mt i{background:var(--yellow)}
 .qrbox svg,.qrbig,.iq .q{background:#fff}
+/* les suggestions d'adresse passent toujours au-dessus des boutons de mode */
+.search{position:relative;z-index:30}
+.modes{position:relative;z-index:1}
 /* ===== VERRE : carte et feuilles de verre, dégradé lever de soleil, capsules ===== */
 html[data-style="verre"] body{background:linear-gradient(180deg,#FFE9DD 0,#EEF0F6 320px,#E6ECF7 100%) fixed}
 html[data-style="verre"] .app{background:transparent}
