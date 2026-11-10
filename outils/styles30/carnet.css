@@ -1,0 +1,53 @@
+/* ===== CARNET PASTEL : papier crème, titres Fraunces, cartes pastel, contours encre et ombres franches ===== */
+html[data-style="carnet"] :is(h2,.big,.brand b,.stats b,.pgs>h1,.lv b.nm,.lv .md2,.lv .gt,.rt,.xpc .xph b,.rvq,.hm,.isl h2,.sumh h2,.ovh h2,.auth h2,.rg b,.sg b,.hs b,.src b,.pl b,.me b,.mode,.ch b){font-family:var(--font-d);font-weight:700}
+html[data-style="carnet"] .brand b{background:none;transform:none;padding:0;font-size:27px;letter-spacing:-.02em;font-style:italic;font-weight:500;color:#C2452D}
+html[data-style="carnet"] .sheet h2{text-transform:none;font-size:21px;letter-spacing:-.01em}
+html[data-style="carnet"] .pgs>h1,html[data-style="carnet"] .ovh h2,html[data-style="carnet"] .sumh h2,html[data-style="carnet"] .auth h2{text-transform:none;letter-spacing:-.01em}
+html[data-style="carnet"] .big{letter-spacing:-.02em}
+html[data-style="carnet"] .search{background:#FFE7A3;border:1px solid var(--ink);border-radius:22px;box-shadow:3px 3px 0 var(--ink);padding:4px 12px}
+html[data-style="carnet"] .search label+label{border-top:1px solid rgba(42,33,27,.35)}
+html[data-style="carnet"] .search input{background:#FFFBF3;border-radius:12px;padding:8px 10px;margin:3px 0}
+html[data-style="carnet"] .dot{border-width:2px}
+html[data-style="carnet"] .dot.end{background:#C2452D;border-color:var(--ink)}
+html[data-style="carnet"] .gps{background:#FFFBF3;border:1px solid var(--ink)}
+html[data-style="carnet"] .mode{--mb:#FFFBF3;background:var(--mb);border:1px solid var(--ink);border-radius:20px;box-shadow:3px 3px 0 var(--ink);padding:9px 14px}
+html[data-style="carnet"] .mode:nth-child(4n+1){--mb:#CDEBD6}
+html[data-style="carnet"] .mode:nth-child(4n+2){--mb:#CFE6FF}
+html[data-style="carnet"] .mode:nth-child(4n+3){--mb:#DCD2FF}
+html[data-style="carnet"] .mode:nth-child(4n+4){--mb:#FFCDB8}
+html[data-style="carnet"] .mode[aria-pressed="true"]{background:var(--mb);color:var(--ink);border:2px solid #C2452D;transform:rotate(-1.2deg)}
+html[data-style="carnet"] .mode small,html[data-style="carnet"] .mode[aria-pressed="true"] small{color:var(--muted);opacity:1}
+html[data-style="carnet"] .map{border:1px solid var(--ink);border-radius:22px;box-shadow:3px 3px 0 var(--ink)}
+html[data-style="carnet"] .map.full{border-radius:0;box-shadow:none}
+html[data-style="carnet"] .maplibregl-canvas{filter:sepia(.28) saturate(.9) hue-rotate(-6deg)}
+html[data-style="carnet"] .legend,html[data-style="carnet"] .mapexp,html[data-style="carnet"] .mapclose{background:#FFFBF3;border:1px solid var(--ink)}
+html[data-style="carnet"] .sheet{background:var(--peach);border-top:1px solid var(--ink);border-radius:26px 26px 0 0}
+html[data-style="carnet"] .ctawrap{background:var(--peach)}
+html[data-style="carnet"] .stop,html[data-style="carnet"] .card,html[data-style="carnet"] .opt,html[data-style="carnet"] .lc,html[data-style="carnet"] .ch,html[data-style="carnet"] .pl,html[data-style="carnet"] .set,html[data-style="carnet"] .me,html[data-style="carnet"] .hc,html[data-style="carnet"] .gar,html[data-style="carnet"] .xpc,html[data-style="carnet"] .nxp,html[data-style="carnet"] .bd,html[data-style="carnet"] .dvp,html[data-style="carnet"] .ibk,html[data-style="carnet"] .rvc,html[data-style="carnet"] .prop,html[data-style="carnet"] .notice,html[data-style="carnet"] .rl .it,html[data-style="carnet"] .el{border-width:1px;border-radius:20px}
+html[data-style="carnet"] .stop:nth-of-type(odd){background:#FFE7A3}
+html[data-style="carnet"] .stop:nth-of-type(even){background:#CDEBD6}
+html[data-style="carnet"] .stop em{background:#C2452D;color:#F3ECDF;border-radius:8px;padding:1px 7px;display:inline-block;transform:rotate(3deg)}
+html[data-style="carnet"] .card,html[data-style="carnet"] .opt{box-shadow:2px 2px 0 var(--ink)}
+html[data-style="carnet"] .card[aria-pressed="true"],html[data-style="carnet"] .opt[aria-pressed="true"]{background:#FFE7A3;box-shadow:3px 3px 0 var(--ink)}
+html[data-style="carnet"] .chips button,html[data-style="carnet"] .dl button,html[data-style="carnet"] .pref select,html[data-style="carnet"] .seg button,html[data-style="carnet"] .rvs button,html[data-style="carnet"] .xbar button,html[data-style="carnet"] .xctl button,html[data-style="carnet"] .sum2 button,html[data-style="carnet"] .rbtn button{border-width:1px}
+html[data-style="carnet"] .chips button[aria-pressed="true"]{background:#FFE7A3}
+html[data-style="carnet"] .cta{text-transform:none;font-family:var(--font-d);font-weight:700;font-size:19px;letter-spacing:0;border-width:1px;box-shadow:4px 4px 0 var(--ink)}
+html[data-style="carnet"] .cta:active,html[data-style="carnet"] .ctasplit button:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
+html[data-style="carnet"] .ctasplit button{border-width:1px;font-family:var(--font-d);font-weight:700;font-size:15px;text-transform:none;box-shadow:3px 3px 0 var(--ink)}
+html[data-style="carnet"] .ctasplit .cta2{background:#FFFBF3}
+html[data-style="carnet"] .ctasplit .cta3{background:#C2452D;color:#F3ECDF}
+html[data-style="carnet"] .tabbar{background:var(--bg);border-top:1px solid var(--ink)}
+html[data-style="carnet"] .tabbar button{border-radius:14px}
+html[data-style="carnet"] .tabbar button[aria-selected=true]{background:#FFE7A3;color:var(--ink);border:1px solid var(--ink)}
+html[data-style="carnet"] .lv{background:#DCD2FF;color:var(--ink);border-color:var(--ink)}
+html[data-style="carnet"] .lv .n{background:#C2452D;color:#F3ECDF}
+html[data-style="carnet"] .lc.hot,html[data-style="carnet"] .tag.best{background:#FFE7A3}
+html[data-style="carnet"] .tag.on{background:var(--ink);color:#F3ECDF}
+html[data-style="carnet"] .tg[aria-checked=true]{background:#C2452D}
+html[data-style="carnet"] .xpill{border-width:1px;box-shadow:2px 2px 0 var(--ink)}
+html[data-style="carnet"] .xpill.on{background:var(--ink);color:#F3ECDF}
+html[data-style="carnet"] .xnote,html[data-style="carnet"] #xattr{background:rgba(255,251,243,.92)}
+html[data-style="carnet"] .pin{border:2px solid #FFFBF3;box-shadow:0 0 0 1.5px #2A211B}
+html[data-style="carnet"] input[type=range]{accent-color:#C2452D}
+html[data-style="carnet"] .result{border-top:1px dashed var(--ink)}
+html[data-style="carnet"] .ov,html[data-style="carnet"] .pg{background:var(--bg)}
