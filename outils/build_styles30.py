@@ -102,5 +102,5 @@ def build(style,label,layer_css):
     assert 'data-style="%s"'%style in s and 'theme-%s'%style in s
     return s
 if __name__=='__main__':
-    for style,label,css,name in [('verre','Verre',VERRE,'Miam ride osm - vers 31 Verre.html'),('carnet','Carnet pastel',CARNET,'Miam ride osm - vers 31 Carnet.html')]:
+    for style,label,css,name in [('verre','Verre',VERRE,'Miam ride osm - vers 31 Verre.html')]:  # Carnet pastel abandonné : on ne génère plus que Verre (réactiver ici si besoin)
         o=build(style,label,css);open('/mnt/user-data/outputs/'+name,'w').write(o);print(name,len(o))
