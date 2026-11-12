@@ -49,14 +49,14 @@ def mk(**kw):
      r=dict(zip(['12','14','16','18','20','22','26'],[12,14,16,18,20,22,26])),pill='99px',font='Poppins,system-ui,-apple-system,"Segoe UI",sans-serif',fontd='Poppins,system-ui,sans-serif',tt='uppercase',
      xland='#F3E9D8',dot='#D9D4CB',soft='#F1ECE4',soft2='#EDE8DF',dash='#A9A096',bad='#b3261e',badbg='#FFE9E5',avoid='#E5432D',ok='#1E8A4C',scheme='light')
     d.update(kw);return d
-GRAD='linear-gradient(120deg,#FF8A5B,#FF5E8A 55%,#7A5CFF)'
+GRAD='linear-gradient(120deg,#FFB03A,#FF8A2E 50%,#F2551C)'
 T={}
-T['verre']=mk(bg='#EEF0F6',surf='#FFFFFF',peach='rgba(255,255,255,.72)',ink='#15151F',onink='#FFFFFF',muted='#6A6A7C',bc='rgba(21,21,31,.10)',bw='1px',bw1='1px',bw3='1.5px',acc='#F2487F',ony='#FFFFFF',
- selbg=GRAD,selfg='#FFFFFF',selbc='transparent',ctabg=GRAD,ctafg='#FFFFFF',ctabc='transparent',route='#FF5E8A',routebg='#FFFFFF',
+T['verre']=mk(bg='#EEF0F6',surf='#FFFFFF',peach='rgba(255,255,255,.72)',ink='#15151F',onink='#FFFFFF',muted='#6A6A7C',bc='rgba(21,21,31,.10)',bw='1px',bw1='1px',bw3='1.5px',acc='#D9530F',ony='#FFFFFF',
+ selbg=GRAD,selfg='#FFFFFF',selbc='transparent',ctabg=GRAD,ctafg='#FFFFFF',ctabc='transparent',route='#FF8A2E',routebg='#FFFFFF',
  land='#E9EEF1',park='#CFE8D2',water='#BFD9F0',road='#FFFFFF',
- sh='0 10px 24px rgba(255,94,138,.36)',sha='0 4px 10px rgba(255,94,138,.30)',shgo='0 12px 30px rgba(255,94,138,.42)',shs='0 3px 10px rgba(40,40,80,.10)',shib='0 6px 16px rgba(40,40,80,.12)',
+ sh='0 10px 24px rgba(255,138,46,.36)',sha='0 4px 10px rgba(255,138,46,.30)',shgo='0 12px 30px rgba(255,138,46,.42)',shs='0 3px 10px rgba(40,40,80,.10)',shib='0 6px 16px rgba(40,40,80,.12)',
  r=dict(zip(['12','14','16','18','20','22','26'],[14,16,18,20,22,24,28])),pill='999px',font='"Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",sans-serif',fontd='"Plus Jakarta Sans",system-ui,sans-serif',tt='none',
- xland='#E9EEF1',dot='#D6D9E3',soft='#EEF0F6',soft2='#E8EBF3',dash='#B9BDCE',bad='#D92D4B',badbg='#FDE3E8',avoid='#E5432D',ok='#1E9E6A')
+ xland='#E9EEF1',dot='#D6D9E3',soft='#EEF0F6',soft2='#E8EBF3',dash='#B9BDCE',bad='#C0261C',badbg='#FDE3E8',avoid='#E5432D',ok='#1E9E6A')
 T['carnet']=mk(bg='#F3ECDF',surf='#FFFBF3',peach='#EFE5D3',ink='#2A211B',onink='#F3ECDF',muted='#6E5F52',bc='#2A211B',bw='1px',bw1='1px',bw3='2px',acc='#FFE7A3',ony='#2A211B',
  selbg='#FFE7A3',selfg='#2A211B',selbc='#2A211B',ctabg='#C2452D',ctafg='#F3ECDF',ctabc='#2A211B',route='#C2452D',routebg='#FFFBF3',
  land='#EFE5D3',park='#CDEBD6',water='#CFE6FF',road='#FFFBF3',

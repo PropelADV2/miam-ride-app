@@ -1,15 +1,15 @@
-/* ===== VERRE : carte et feuilles de verre, dégradé lever de soleil, capsules ===== */
+/* ===== VERRE : carte et feuilles de verre, dégradé orange, capsules ===== */
 html[data-style="verre"] body{background:linear-gradient(180deg,#FFE9DD 0,#EEF0F6 320px,#E6ECF7 100%) fixed}
 html[data-style="verre"] .app{background:transparent}
 html[data-style="verre"] header{background:transparent;padding-top:14px}
-html[data-style="verre"] .brand b{background-image:linear-gradient(120deg,#FF8A5B,#FF5E8A 55%,#7A5CFF);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;transform:none;padding:0;font-size:24px;letter-spacing:-.04em;font-weight:800}
+html[data-style="verre"] .brand b{background-image:linear-gradient(120deg,#FFB03A,#FF8A2E 50%,#F2551C);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;transform:none;padding:0;font-size:24px;letter-spacing:-.04em;font-weight:800}
 html[data-style="verre"] .search{background:rgba(255,255,255,.72);-webkit-backdrop-filter:blur(22px) saturate(1.5);backdrop-filter:blur(22px) saturate(1.5);border:1px solid rgba(255,255,255,.75);box-shadow:0 10px 30px rgba(40,40,80,.14);border-radius:26px}
 html[data-style="verre"] .search label+label{border-top:1px solid rgba(21,21,31,.10)}
 html[data-style="verre"] .dot{border:0;background:#15151F}
-html[data-style="verre"] .dot.end{background:#7A5CFF;border:0}
+html[data-style="verre"] .dot.end{background:#F2551C;border:0}
 html[data-style="verre"] .gps{background:rgba(21,21,31,.07)}
 html[data-style="verre"] .mode{background:rgba(255,255,255,.72);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.8);border-radius:22px;box-shadow:0 3px 10px rgba(40,40,80,.08);font-weight:700;min-width:112px}
-html[data-style="verre"] .mode[aria-pressed="true"]{background:linear-gradient(120deg,#FF8A5B,#FF5E8A 55%,#7A5CFF);color:#fff;border-color:transparent;box-shadow:0 8px 18px rgba(255,94,138,.35)}
+html[data-style="verre"] .mode[aria-pressed="true"]{background:linear-gradient(120deg,#FFB03A,#FF8A2E 50%,#F2551C);color:#fff;border-color:transparent;box-shadow:0 8px 18px rgba(255,138,46,.35)}
 html[data-style="verre"] .mode[aria-pressed="true"] small{color:#fff;opacity:.85}
 html[data-style="verre"] .map{border:0;border-radius:28px;box-shadow:0 12px 34px rgba(40,40,80,.16)}
 html[data-style="verre"] .map.full{border-radius:0;box-shadow:none}
@@ -20,7 +20,7 @@ html[data-style="verre"] .sheet h2{text-transform:none;letter-spacing:-.02em;fon
 html[data-style="verre"] GLASS{background:rgba(255,255,255,.82);border:1px solid rgba(255,255,255,.9);box-shadow:0 3px 12px rgba(40,40,80,.08)}
 html[data-style="verre"] .chips button,html[data-style="verre"] .dl button,html[data-style="verre"] .pref select,html[data-style="verre"] .seg button,html[data-style="verre"] .rvs button,html[data-style="verre"] .xbar button,html[data-style="verre"] .xctl button,html[data-style="verre"] .sum2 button,html[data-style="verre"] .rbtn button{background:rgba(21,21,31,.06);border:1px solid transparent;box-shadow:none}
 html[data-style="verre"] .chips button[aria-pressed="true"]{background:#15151F;color:#fff}
-html[data-style="verre"] .opt[aria-pressed="true"],html[data-style="verre"] .card[aria-pressed="true"]{box-shadow:0 8px 20px rgba(255,94,138,.28)}
+html[data-style="verre"] .opt[aria-pressed="true"],html[data-style="verre"] .card[aria-pressed="true"]{box-shadow:0 8px 20px rgba(255,138,46,.28)}
 html[data-style="verre"] .cta{text-transform:none;font-size:17px;letter-spacing:0;border:0;padding:16px;box-shadow:var(--sh)}
 html[data-style="verre"] .cta:active,html[data-style="verre"] .ctasplit button:active{transform:translateY(1px);box-shadow:var(--sha)}
 html[data-style="verre"] .ctasplit button{border:0;text-transform:none;font-size:14px;box-shadow:0 3px 10px rgba(40,40,80,.10)}
@@ -28,16 +28,16 @@ html[data-style="verre"] .ctasplit .cta2{background:rgba(21,21,31,.08);box-shado
 html[data-style="verre"] .ctasplit .cta3{background:var(--cta-bg);color:#fff;box-shadow:var(--sh)}
 html[data-style="verre"] .tabbar{background:rgba(255,255,255,.80);-webkit-backdrop-filter:blur(26px) saturate(1.6);backdrop-filter:blur(26px) saturate(1.6);border-top:1px solid rgba(255,255,255,.9);box-shadow:0 -8px 28px rgba(40,40,80,.10)}
 html[data-style="verre"] .tabbar button{border:0;background:transparent;border-radius:18px}
-html[data-style="verre"] .tabbar button[aria-selected=true]{background:rgba(242,72,127,.12);color:#D6275F}
+html[data-style="verre"] .tabbar button[aria-selected=true]{background:rgba(255,138,46,.12);color:#B8480A}
 html[data-style="verre"] .lv .n,html[data-style="verre"] .tag.on{background:var(--ink);color:#fff}
-html[data-style="verre"] .lv,html[data-style="verre"] .lc.hot,html[data-style="verre"] .tag.best,html[data-style="verre"] .gar li.cur{background:linear-gradient(120deg,#FF8A5B,#FF5E8A 55%,#7A5CFF);color:#fff;border-color:transparent}
-html[data-style="verre"] .tg[aria-checked=true]{background:linear-gradient(120deg,#FF8A5B,#FF5E8A)}
+html[data-style="verre"] .lv,html[data-style="verre"] .lc.hot,html[data-style="verre"] .tag.best,html[data-style="verre"] .gar li.cur{background:linear-gradient(120deg,#FFB03A,#FF8A2E 50%,#F2551C);color:#fff;border-color:transparent}
+html[data-style="verre"] .tg[aria-checked=true]{background:linear-gradient(120deg,#FFB03A,#FF8A2E)}
 html[data-style="verre"] .xnote,html[data-style="verre"] #xattr{background:rgba(255,255,255,.8);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
 html[data-style="verre"] .pin{border:2.5px solid #fff;box-shadow:0 3px 10px rgba(40,40,80,.3)}
-html[data-style="verre"] input[type=range]{accent-color:#FF5E8A}
+html[data-style="verre"] input[type=range]{accent-color:#FF8A2E}
 html[data-style="verre"] .result{border-top:1px solid rgba(21,21,31,.12)}
-html[data-style="verre"] .stop em{background:rgba(255,94,138,.14);color:#D6275F;border-radius:999px;padding:1px 8px}
+html[data-style="verre"] .stop em{background:rgba(255,138,46,.14);color:#B8480A;border-radius:999px;padding:1px 8px}
 html[data-style="verre"] .pgs>h1,html[data-style="verre"] .ovh h2,html[data-style="verre"] .sumh h2,html[data-style="verre"] .auth h2{letter-spacing:-.03em;text-transform:none}
 html[data-style="verre"] .ov,html[data-style="verre"] .pg{background:linear-gradient(180deg,#FFE9DD 0,#EEF0F6 320px,#E6ECF7 100%)}
 html[data-style="verre"] .search input:focus-visible{outline:none}
-html[data-style="verre"] .search:focus-within{box-shadow:0 10px 30px rgba(255,94,138,.28)}
+html[data-style="verre"] .search:focus-within{box-shadow:0 10px 30px rgba(255,138,46,.28)}
