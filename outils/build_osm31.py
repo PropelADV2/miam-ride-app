@@ -20,7 +20,7 @@ rep("  const r=await RoutingORS.compute(c,D,[],true);OSMT.orsN++;r.dest=D;r.wayp
 rep(" if(out.length){out.sort((x,y)=>ambScore(x,km)-ambScore(y,km));best=out[0];"," if(out.length){fresh(out);out.sort((x,y)=>ambScore(x,km)-ambScore(y,km));best=out[0];")
 rep(" if(out.length){out.sort((x,y)=>ambScore(x,target)-ambScore(y,target));let best=out[0];"," if(out.length){fresh(out);out.sort((x,y)=>ambScore(x,target)-ambScore(y,target));let best=out[0];")
 # 3. bouton + réinitialisation
-rep('<div class="stats" id="stats"></div>','<div class="stats" id="stats"></div>\n      <button class="mre" id="regen" type="button" hidden></button>')
+rep('<div class="dep" id="depw">','<button class="mre" id="regen" type="button" hidden style="width:100%;margin:0 0 12px;padding:11px 14px;font-size:14px"></button>\n      <div class="dep" id="depw">')
 JS=r"""<script id="v31">
 /* ===== vers 31 : autre trajet / autre boucle ===== */
 function pathOverlap(A,B){if(!A||!B||A.length<2||B.length<2)return 0;const g=new Set();
@@ -47,11 +47,12 @@ async function altDest(c,D,d){
 /* mémorise chaque tracé proposé */
 {const g=gPrepare;gPrepare=async function(){const r=await g.apply(this,arguments);try{S.seen=S.seen||[];if(S.loopG&&S.loopG.path)S.seen.push(S.loopG.path)}catch(e){}return r}}
 {const g=gBusy;gBusy=function(on){g.apply(this,arguments);const r=document.getElementById('regen');if(r)r.disabled=!!on}}
-function regenUI(){const b=document.getElementById('regen');if(!b)return;const on=!!(S.gen&&(S.mode==='boucle'||S.mode==='dest')&&S.loopG);b.hidden=!on;
- b.textContent=S.mode==='dest'?'Proposer un autre trajet':'Générer une autre boucle'}
+function regenUI(){const b=document.getElementById('regen');if(!b)return;const on=!!(S.gen&&(S.mode==='boucle'||S.mode==='dest'));b.hidden=!on;
+ b.textContent=S.mode==='dest'?'↻ Proposer un autre trajet':'↻ Générer une autre boucle'}
+setInterval(()=>{try{regenUI()}catch(e){}},400);
 {const sr=showRes;showRes=function(){const r=sr.apply(this,arguments);try{regenUI()}catch(e){}return r}}
 document.getElementById('go').addEventListener('click',()=>{if(!S.gen){if(!S.regen){S.vary=0;S.seen=[]}S.regen=false;S.noNew=false}},true);
-document.getElementById('regen').onclick=()=>{if(!S.gen||!S.loopG)return;S.regen=true;S.vary=(S.vary||0)+1;S.gen=false;S.picks=[];S.active=0;S.loopG=null;S.routeG=null;S.osmEarly=null;OSMC.key=null;OSMC.k2=null;S.gKey=null;
+document.getElementById('regen').onclick=()=>{if(!S.gen||!S.loopG||document.getElementById('go').disabled)return;S.regen=true;S.vary=(S.vary||0)+1;S.gen=false;S.picks=[];S.active=0;S.loopG=null;S.routeG=null;S.osmEarly=null;OSMC.key=null;OSMC.k2=null;S.gKey=null;
  document.getElementById('go').click();
  const iv=setInterval(()=>{if(S.loopG||!document.getElementById('go').disabled){clearInterval(iv);setTimeout(()=>{if(S.noNew&&typeof osmToast==='function')osmToast('Pas de tracé vraiment différent trouvé : voici le plus proche')},300)}},500);setTimeout(()=>clearInterval(iv),60000)};
 </script>
