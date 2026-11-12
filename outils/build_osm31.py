@@ -19,6 +19,7 @@ rep("const gBearing=()=>((S.sel||0)*40)%360;","const gBearing=()=>((S.sel||0)*40
 rep("  const r=await RoutingORS.compute(c,D,[],true);OSMT.orsN++;r.dest=D;r.waypoints=[];","  const r=(S.mode==='dest'&&S.vary)?await altDest(c,D,d):await RoutingORS.compute(c,D,[],true);OSMT.orsN++;r.dest=D;r.waypoints=r.mids||(r.via?[r.via]:[]);")
 rep(" if(out.length){out.sort((x,y)=>ambScore(x,km)-ambScore(y,km));best=out[0];"," if(out.length){fresh(out);out.sort((x,y)=>ambScore(x,km)-ambScore(y,km));best=out[0];")
 rep(" if(out.length){out.sort((x,y)=>ambScore(x,target)-ambScore(y,target));let best=out[0];"," if(out.length){fresh(out);out.sort((x,y)=>ambScore(x,target)-ambScore(y,target));let best=out[0];")
+rep(" e.textContent='Boulangeries : '+tot+' dans OpenStreetMap · '+corr+' le long du tracé · '+BAK.length+' après filtres · '+inw.length+' dans la fenêtre de la pause '+(j+1)+' · '+op.length+' ouvertes à ton heure'+(tot===0?' — OpenStreetMap n’a rien renvoyé pour cette zone':'')}"," e.textContent=tot===0?'OpenStreetMap n’a renvoyé aucune boulangerie pour cette zone.':'';e.hidden=tot!==0}")
 # 3. bouton + réinitialisation
 rep('<div class="dep" id="depw">','<button class="mre" id="regen" type="button" hidden style="width:100%;margin:0 0 12px;padding:11px 14px;font-size:14px"></button>\n      <div class="dep" id="depw">')
 JS=r"""<script id="v31">
