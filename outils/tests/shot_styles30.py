@@ -6,7 +6,7 @@ NAMES=sys.argv[1:] or ['Verre','Carnet']
 with sync_playwright() as p:
     b=p.chromium.launch(args=['--no-sandbox'])
     for N in NAMES:
-        F='Miam ride osm - vers 33 %s.html'%N
+        F='Miam ride osm - vers 34 %s.html'%N
         ctx=b.new_context(viewport={'width':390,'height':844},device_scale_factor=1,accept_downloads=True);pg=ctx.new_page();errs=[];pg.on('pageerror',lambda e:errs.append(str(e)))
         pg.route('**/api.openrouteservice.org/**',ors);pg.route('**/functions/v1/train-retour',srv);pg.route('**/overpass*/**',ovp3);pg.route('**/maps.mail.ru/**',ovp3);pg.route('**/photon.komoot.io/**',photon3)
         pg.goto('file:///mnt/user-data/outputs/'+F);pg.wait_for_timeout(600)
