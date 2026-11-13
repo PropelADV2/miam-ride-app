@@ -1,7 +1,7 @@
 # Restyle de la vers 30 : deux directions complètes (Verre, Carnet pastel). Mêmes fonctions, seul le style change.
 import re,sys,os
 HERE=os.path.dirname(os.path.abspath(__file__))
-SRC='/mnt/user-data/outputs/Miam ride osm - vers 34.html'
+SRC='/mnt/user-data/outputs/Miam ride osm - vers 35.html'
 s0=open(SRC).read()
 RAD={'12':'--r12','14':'--r14','16':'--r16','18':'--r18','20':'--r20','22':'--r22','26':'--r26','99':'--pill','999':'--pill'}
 def rad(m):
@@ -102,5 +102,5 @@ def build(style,label,layer_css):
     assert 'data-style="%s"'%style in s and 'theme-%s'%style in s
     return s
 if __name__=='__main__':
-    for style,label,css,name in [('verre','Verre',VERRE,'Miam ride osm - vers 34 Verre.html')]:  # Carnet pastel abandonné : on ne génère plus que Verre (réactiver ici si besoin)
+    for style,label,css,name in [('verre','Verre',VERRE,'Miam ride osm - vers 35 Verre.html')]:  # Carnet pastel abandonné : on ne génère plus que Verre (réactiver ici si besoin)
         o=build(style,label,css);open('/mnt/user-data/outputs/'+name,'w').write(o);print(name,len(o))
