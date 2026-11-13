@@ -82,21 +82,51 @@ Deno.serve(async (req) => {
   }
 
   const from = Math.max(0, Math.floor(Number(b?.from ?? 0)));
-  const count = Math.min(6, Math.max(1, Math.floor(Number(b?.count ?? 3))));
-  const fait: { tuile: number; lieux: number }[] = [], echecs: { tuile: number; erreur: string }[] = [];
-  for (let i = from; i < Math.min(from + count, tiles.length); i++) {
-    const t = tiles[i], bb = `${t.s.toFixed(4)},${t.w.toFixed(4)},${t.n.toFixed(4)},${t.e.toFixed(4)}`;
-    const f = filtre(kind);
-    const q = `[out:json][timeout:40];(node${f}(${bb});way${f}(${bb}););out center tags;`;
-    try {
-      const rows = (await overpass(q)).map((e) => toRow(e, kind)).filter(Boolean) as any[];
-      for (let k = 0; k < rows.length; k += 500) {
-        const { error } = await db.from("places").upsert(rows.slice(k, k + 500), { onConflict: "id" });
-        if (error) throw new Error("base : " + error.message);
-      }
-      fait.push({ tuile: i, lieux: rows.length });
-    } catch (e) { echecs.push({ tuile: i, erreur: String((e as Error).message ?? e) }); }
+  const auto = b?.auto === true;
+  const count = Math.min(auto ? 2 : 6, Math.max(1, Math.floor(Number(b?.count ?? (auto ? 2 : 3)))));
+
+  async function traiter() {
+    const fait: { tuile: number; lieux: number }[] = [], echecs: { tuile: number; erreur: string }[] = [];
+    for (let i = from; i < Math.min(from + count, tiles.length); i++) {
+      const t = tiles[i], bb = `${t.s.toFixed(4)},${t.w.toFixed(4)},${t.n.toFixed(4)},${t.e.toFixed(4)}`;
+      const f = filtre(kind);
+      const q = `[out:json][timeout:40];(node${f}(${bb});way${f}(${bb}););out center tags;`;
+      try {
+        const rows = (await overpass(q)).map((e) => toRow(e, kind)).filter(Boolean) as any[];
+        for (let k = 0; k < rows.length; k += 500) {
+          const { error } = await db.from("places").upsert(rows.slice(k, k + 500), { onConflict: "id" });
+          if (error) throw new Error("base : " + error.message);
+        }
+        fait.push({ tuile: i, lieux: rows.length });
+      } catch (e) { echecs.push({ tuile: i, erreur: String((e as Error).message ?? e) }); }
+    }
+    return { fait, echecs, next: Math.min(from + count, tiles.length) };
   }
-  const next = Math.min(from + count, tiles.length);
-  return json({ ok: true, done: next >= tiles.length, next, total: tiles.length, fait, echecs });
+
+  if (!auto) {
+    const r = await traiter();
+    return json({ ok: true, done: r.next >= tiles.length, next: r.next, total: tiles.length, fait: r.fait, echecs: r.echecs });
+  }
+
+  // Mode automatique : un seul appel lance tout. Chaque étape traite 2 tuiles en arrière-plan,
+  // puis rappelle la fonction pour les 2 suivantes, jusqu'à la fin, puis nettoie les lieux disparus.
+  const start = typeof b?.start === "string" ? b.start : new Date().toISOString();
+  const fails = Number(b?.fails ?? 0);
+  // @ts-ignore EdgeRuntime existe chez Supabase
+  EdgeRuntime.waitUntil((async () => {
+    const r = await traiter();
+    const fails2 = fails + r.echecs.length;
+    console.log(JSON.stringify({ kind, from, next: r.next, total: tiles.length, fait: r.fait, echecs: r.echecs }));
+    const svc = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+    const suite = r.next >= tiles.length
+      ? (fails2 === 0 ? { kind, action: "purge", before: start } : null)
+      : { kind, auto: true, from: r.next, start, fails: fails2 };
+    if (!suite) { console.log("Fin avec des tuiles en échec : relance le chargement, pas de nettoyage."); return; }
+    await fetch(Deno.env.get("SUPABASE_URL") + "/functions/v1/sync-places", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${svc}`, apikey: svc, "x-sync-key": KEY },
+      body: JSON.stringify(suite),
+    }).then((x) => x.body?.cancel()).catch((e) => console.log("rappel impossible : " + e));
+  })());
+  return json({ ok: true, started: true, from, total: tiles.length });
 });
