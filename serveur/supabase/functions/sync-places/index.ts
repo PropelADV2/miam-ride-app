@@ -10,6 +10,7 @@ const OVP = [
   "https://overpass.private.coffee/api/interpreter",
   "https://overpass.openstreetmap.fr/api/interpreter",
 ];
+const UA = "MiamRide/1.0 (chargement des boulangeries ; https://github.com/PropelADV2/miam-ride-app)";
 const ZONE = { latMin: 47.65, latMax: 49.7, lngMin: 0.85, lngMax: 4.2 };
 const STEP_LAT = 0.125, STEP_LNG = 0.175;
 const CORS = {
@@ -67,6 +68,10 @@ Deno.serve(async (req) => {
   if (!KEY) return json({ ok: false, reason: "serveur_non_configure" }, 500);
   if (req.headers.get("x-sync-key") !== KEY) return json({ ok: false, reason: "cle_refusee" }, 403);
 
+  // adresse de cette fonction, quel que soit son nom
+  const nomFonction = new URL(req.url).pathname.split("/").filter(Boolean).pop() ?? "sync-places";
+  const adresse = Deno.env.get("SUPABASE_URL") + "/functions/v1/" + nomFonction;
+
   let b: any;
   try { b = await req.json(); } catch { return json({ ok: false, reason: "json" }, 400); }
   const kind = b?.kind === "cafe" ? "cafe" : "bakery";
@@ -111,8 +116,8 @@ Deno.serve(async (req) => {
     return json({ ok: true, done: r.next >= tiles.length, next: r.next, total: tiles.length, fait: r.fait, echecs: r.echecs });
   }
 
-  // Mode automatique : un seul appel lance tout. Chaque étape traite 2 tuiles en arrière-plan,
-  // puis rappelle la fonction pour les 2 suivantes, jusqu'à la fin, puis nettoie les lieux disparus.
+  // Mode automatique : un seul appel lance tout. Chaque étape traite 3 tuiles en arrière-plan,
+  // puis rappelle la fonction pour les 3 suivantes, jusqu'à la fin, puis nettoie les lieux disparus.
   const start = typeof b?.start === "string" ? b.start : new Date().toISOString();
   const fails = Number(b?.fails ?? 0);
   // @ts-ignore EdgeRuntime existe chez Supabase
@@ -125,7 +130,7 @@ Deno.serve(async (req) => {
       ? (fails2 === 0 ? { kind, action: "purge", before: start } : null)
       : { kind, auto: true, from: r.next, start, fails: fails2 };
     if (!suite) { console.log("Fin avec des tuiles en échec : relance le chargement, pas de nettoyage."); return; }
-    await fetch(Deno.env.get("SUPABASE_URL") + "/functions/v1/sync-places", {
+    await fetch(adresse, {
       method: "POST",
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${svc}`, apikey: svc, "x-sync-key": KEY },
       body: JSON.stringify(suite),
