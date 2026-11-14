@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Miam Ride – Charger les boulangeries</title>
+<style>
+body{font:16px/1.5 system-ui,Arial,sans-serif;max-width:640px;margin:32px auto;padding:0 16px;color:#1b1b24}
+h1{font-size:24px;margin:0 0 6px}p.s{color:#5b5b6b;margin:0 0 20px}
+label{display:block;font-weight:600;margin:14px 0 4px}input{width:100%;box-sizing:border-box;padding:10px;border:1px solid #c9c9d6;border-radius:10px;font:inherit}
+button{margin-top:18px;padding:14px 22px;border:0;border-radius:12px;background:linear-gradient(120deg,#FFB03A,#FF6A4D 50%,#E8407A);color:#fff;font:700 17px system-ui;cursor:pointer}
+button:disabled{opacity:.5;cursor:default}
+#bar{height:14px;background:#ececf3;border-radius:8px;overflow:hidden;margin:20px 0 8px}#fill{height:100%;width:0;background:#FF6A4D;transition:width .3s}
+#log{white-space:pre-wrap;font:13px/1.5 ui-monospace,monospace;background:#f6f6fa;border-radius:10px;padding:12px;max-height:260px;overflow:auto;margin-top:12px}
+.ok{color:#1b7f3b;font-weight:700}.ko{color:#b3261e;font-weight:700}
+</style></head><body>
+<h1>Charger les boulangeries</h1>
+<p class="s">Cette page va chercher les boulangeries d'Île-de-France et des environs sur OpenStreetMap, puis les enregistre dans ta base Supabase. Laisse cet onglet ouvert jusqu'à « Terminé » (10 à 20 minutes).</p>
+<label>Adresse du projet Supabase</label><input id="url" value="https://fnhattfiiragkpgdiqdu.supabase.co">
+<label>Clé « anon »</label><input id="anon" value="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZuaGF0dGZpaXJhZ2twZ2RpcWR1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTQxNzQzODgsImV4cCI6MjEwOTc1MDM4OH0.1gkEv8VK24CyWFG0kpAXIGf6ANx0thigAzFB2ST1uUY">
+<label>Mot de passe de chargement</label><input id="pw" type="password" placeholder="celui que tu as choisi dans le script SQL">
+<label>Type de lieux</label><select id="kind" style="width:100%;padding:10px;border-radius:10px;border:1px solid #c9c9d6;font:inherit"><option value="bakery">Boulangeries</option><option value="cafe">Cafés (plus tard)</option></select>
+<button id="go">Charger</button>
+<div id="bar"><div id="fill"></div></div><div id="st"></div><div id="log"></div>
+<script>
+const ZONE={latMin:47.65,latMax:49.7,lngMin:0.85,lngMax:4.2},SL=0.25,SN=0.35;
+const OVP=['https://overpass-api.de/api/interpreter','https://overpass.kumi.systems/api/interpreter','https://overpass.private.coffee/api/interpreter','https://overpass.openstreetmap.fr/api/interpreter'];
+const $=id=>document.getElementById(id);
+const log=t=>{const l=$('log');l.textContent+=t+'\n';l.scrollTop=l.scrollHeight};
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+const tiles=[];for(let la=ZONE.latMin;la<ZONE.latMax-1e-9;la+=SL)for(let ln=ZONE.lngMin;ln<ZONE.lngMax-1e-9;ln+=SN)tiles.push({s:la,w:ln,n:Math.min(la+SL,ZONE.latMax),e:Math.min(ln+SN,ZONE.lngMax)});
+const filt=k=>k==='cafe'?'["amenity"="cafe"]["name"]':'["shop"="bakery"]';
+function split(t){const a=(t.s+t.n)/2,b=(t.w+t.e)/2;return[{s:t.s,w:t.w,n:a,e:b},{s:t.s,w:b,n:a,e:t.e},{s:a,w:t.w,n:t.n,e:b},{s:a,w:b,n:t.n,e:t.e}]}
+async function overpass(t,kind){const bb=[t.s,t.w,t.n,t.e].map(x=>x.toFixed(4)).join(','),f=filt(kind),q=`[out:json][timeout:40];(node${f}(${bb});way${f}(${bb}););out center tags;`;let last='';
+ for(let tour=0;tour<2;tour++){for(const u of OVP){try{const c=new AbortController(),to=setTimeout(()=>c.abort(),45000);
+  const r=await fetch(u,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:'data='+encodeURIComponent(q),signal:c.signal});clearTimeout(to);
+  if(!r.ok){last=new URL(u).hostname+' '+r.status;continue}const j=await r.json();
+  if(j.remark&&/error|timed out|memory/i.test(j.remark)&&!(j.elements||[]).length){last='surchargé';continue}return j.elements||[]}catch(e){last=new URL(u).hostname+' '+(e.message||e)}}await sleep(2000)}
+ throw new Error(last||'Overpass injoignable')}
+function row(e,kind){const t=e.tags||{},lat=e.lat!=null?e.lat:e.center&&e.center.lat,lng=e.lon!=null?e.lon:e.center&&e.center.lon;if(lat==null||lng==null)return null;
+ const a=[[t['addr:housenumber'],t['addr:street']].filter(Boolean).join(' '),t['addr:city']].filter(Boolean).join(', ');
+ return{id:e.type+'/'+e.id,name:t.name||(kind==='cafe'?'Café':'Boulangerie'),addr:a||null,lat,lng,hours:t.opening_hours||null}}
+async function rpc(name,body){const u=$('url').value.replace(/\/+$/,'').replace(/\/rest\/v1$/,''),k=$('anon').value.trim();
+ const r=await fetch(u+'/rest/v1/rpc/'+name,{method:'POST',headers:{'Content-Type':'application/json',apikey:k,Authorization:'Bearer '+k},body:JSON.stringify(body)});
+ const t=await r.text();if(!r.ok){let m=t;try{m=JSON.parse(t).message||t}catch(_){}throw new Error(r.status+' '+m)}try{return JSON.parse(t)}catch(_){return t}}
+async function loadTile(t,kind,pw,depth){let els;try{els=await overpass(t,kind)}catch(e){if(depth<2){log('  zone trop lourde, je la coupe en 4…');let n=0;for(const s of split(t))n+=await loadTile(s,kind,pw,depth+1);return n}throw e}
+ const seen=new Set(),rows=[];for(const e of els){const r=row(e,kind);if(r&&!seen.has(r.id)){seen.add(r.id);rows.push(r)}}
+ for(let i=0;i<rows.length;i+=400)await rpc('import_places',{p_key:pw,p_kind:kind,p_rows:rows.slice(i,i+400)});return rows.length}
+let running=false;
+$('go').onclick=async()=>{if(running)return;const pw=$('pw').value,kind=$('kind').value;if(!pw){alert('Entre le mot de passe de chargement.');return}
+ running=true;$('go').disabled=true;$('log').textContent='';const start=new Date().toISOString();let total=0,fails=[];
+ for(let i=0;i<tiles.length;i++){$('st').textContent='Zone '+(i+1)+' sur '+tiles.length+' · '+total+' lieux enregistrés';$('fill').style.width=(i/tiles.length*100)+'%';
+  let ok=false,err='';for(let a=0;a<3&&!ok;a++){try{const n=await loadTile(tiles[i],kind,pw,0);total+=n;log('Zone '+(i+1)+' : '+n+' lieux');ok=true}catch(e){err=e.message;if(/cle_refusee/.test(err)){log('Mot de passe refusé.');$('st').innerHTML='<span class="ko">Mot de passe refusé : vérifie-le et recommence.</span>';running=false;$('go').disabled=false;return}await sleep(3000)}}
+  if(!ok){fails.push(i+1);log('Zone '+(i+1)+' : échec ('+err+')')}await sleep(600)}
+ $('fill').style.width='100%';
+ if(fails.length){$('st').innerHTML='<span class="ko">Terminé avec '+fails.length+' zone(s) en échec : '+fails.join(', ')+'. Relance simplement : les lieux déjà chargés restent.</span>'}
+ else{try{const n=await rpc('purge_places',{p_key:pw,p_kind:kind,p_before:start});$('st').innerHTML='<span class="ok">Terminé : '+total+' lieux chargés.</span>'+(n?' ('+n+' anciens retirés)':'')}catch(e){$('st').innerHTML='<span class="ok">Terminé : '+total+' lieux chargés.</span> (nettoyage non fait : '+e.message+')'}}
+ running=false;$('go').disabled=false};
+</script></body></html>

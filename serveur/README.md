@@ -44,3 +44,11 @@ Zone : Île-de-France + ~50 km de marge (lat 47,65–49,70 ; lng 0,85–4,20), d
 ### Lecture par l'appli
 - `rpc/places_near` (disque) et `rpc/places_near_path` (le long d'un tracé), avec la clé « anon ». Lecture publique, écriture réservée au serveur.
 - Cafés : `./charger-places.sh cafe` charge les cafés nommés dans la même table (`kind = 'cafe'`).
+
+### Variante sans fonction (recommandée) : `charger-boulangeries.html`
+Overpass refuse souvent les appels venant des serveurs d'hébergement (403 / 406). Variante : une page à ouvrir dans le navigateur
+va chercher les lieux sur Overpass (le navigateur, lui, est accepté) et les envoie dans Supabase par `rpc/import_places`.
+1. SQL Editor : coller `sql/places.sql` puis `sql/import-places.sql` (choisir le mot de passe dans ce second fichier).
+2. Ouvrir `charger-boulangeries.html` (double-clic), entrer le mot de passe, cliquer sur « Charger ». Laisser l'onglet ouvert (10 à 20 min).
+3. Relancer au besoin : les lieux déjà chargés restent (mise à jour par identifiant).
+La fonction `sync-places` n'est plus nécessaire.
