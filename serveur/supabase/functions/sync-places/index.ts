@@ -1,6 +1,6 @@
 // Miam Ride : charge les boulangeries (ou cafés) d'OpenStreetMap dans la table `places`.
 // Zone : Île-de-France + environ 50 km de marge. Découpée en tuiles ; chaque appel traite quelques tuiles
-// (une fonction Supabase s'arrête après ~2 minutes). Le script serveur/charger-places.sh enchaîne les appels.
+// (une fonction Supabase s'arrête après ~2,5 minutes : budget de 100 s par appel). charger-places.sh ou le mode auto enchaînent les appels.
 // Secrets attendus : SYNC_KEY (mot de passe du chargement). SUPABASE_URL et SUPABASE_SERVICE_ROLE_KEY existent déjà.
 import { createClient } from "npm:@supabase/supabase-js@2";
 
@@ -11,7 +11,7 @@ const OVP = [
   "https://overpass.openstreetmap.fr/api/interpreter",
 ];
 const ZONE = { latMin: 47.65, latMax: 49.7, lngMin: 0.85, lngMax: 4.2 };
-const STEP_LAT = 0.25, STEP_LNG = 0.35;
+const STEP_LAT = 0.125, STEP_LNG = 0.175;
 const CORS = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, apikey, content-type, x-client-info, x-sync-key",
@@ -27,26 +27,26 @@ for (let la = ZONE.latMin; la < ZONE.latMax - 1e-9; la += STEP_LAT)
 
 const filtre = (kind: string) => kind === "cafe" ? `["amenity"="cafe"]["name"]` : `["shop"="bakery"]`;
 
-async function overpass(q: string): Promise<any[]> {
-  let last = "";
-  for (let tour = 0; tour < 2; tour++) {
-    for (const u of OVP) {
-      try {
-        const r = await fetch(u, {
-          method: "POST",
-          headers: { "Content-Type": "application/x-www-form-urlencoded" },
-          body: "data=" + encodeURIComponent(q),
-          signal: AbortSignal.timeout(45000),
-        });
-        if (!r.ok) { last = `Overpass ${r.status}`; continue; }
-        const j = await r.json();
-        if (j.remark && /error|timed out|memory/i.test(j.remark) && !(j.elements ?? []).length) { last = "Overpass surchargé"; continue; }
-        return j.elements ?? [];
-      } catch (e) { last = String((e as Error).message ?? e); }
-    }
-    await new Promise((res) => setTimeout(res, 2000));
+async function overpass(q: string, limite: number): Promise<any[]> {
+  const erreurs: string[] = [];
+  for (const u of OVP) {
+    const reste = limite - Date.now();
+    if (reste < 8000) { erreurs.push("temps écoulé"); break; }
+    const hote = new URL(u).hostname;
+    try {
+      const r = await fetch(u, {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded", "User-Agent": UA, "Accept": "application/json" },
+        body: "data=" + encodeURIComponent(q),
+        signal: AbortSignal.timeout(Math.min(25000, reste)),
+      });
+      if (!r.ok) { erreurs.push(`${hote} ${r.status}`); continue; }
+      const j = await r.json();
+      if (j.remark && /error|timed out|memory/i.test(j.remark) && !(j.elements ?? []).length) { erreurs.push(`${hote} surchargé`); continue; }
+      return j.elements ?? [];
+    } catch (e) { erreurs.push(`${hote} ${String((e as Error).message ?? e).slice(0, 50)}`); }
   }
-  throw new Error(last || "Overpass injoignable");
+  throw new Error(erreurs.slice(-4).join(" | ") || "Overpass injoignable");
 }
 
 function toRow(e: any, kind: string) {
@@ -83,16 +83,19 @@ Deno.serve(async (req) => {
 
   const from = Math.max(0, Math.floor(Number(b?.from ?? 0)));
   const auto = b?.auto === true;
-  const count = Math.min(auto ? 2 : 6, Math.max(1, Math.floor(Number(b?.count ?? (auto ? 2 : 3)))));
+  const count = Math.min(auto ? 3 : 6, Math.max(1, Math.floor(Number(b?.count ?? (auto ? 3 : 1)))));
 
   async function traiter() {
     const fait: { tuile: number; lieux: number }[] = [], echecs: { tuile: number; erreur: string }[] = [];
-    for (let i = from; i < Math.min(from + count, tiles.length); i++) {
+    const limite = Date.now() + 100000; // une fonction Supabase est coupée vers 150 s
+    let i = from;
+    for (; i < Math.min(from + count, tiles.length); i++) {
+      if (i > from && Date.now() > limite - 15000) break; // plus assez de temps : la tuile sera reprise à l'appel suivant
       const t = tiles[i], bb = `${t.s.toFixed(4)},${t.w.toFixed(4)},${t.n.toFixed(4)},${t.e.toFixed(4)}`;
       const f = filtre(kind);
-      const q = `[out:json][timeout:40];(node${f}(${bb});way${f}(${bb}););out center tags;`;
+      const q = `[out:json][timeout:25];(node${f}(${bb});way${f}(${bb}););out center tags;`;
       try {
-        const rows = (await overpass(q)).map((e) => toRow(e, kind)).filter(Boolean) as any[];
+        const rows = (await overpass(q, limite)).map((e) => toRow(e, kind)).filter(Boolean) as any[];
         for (let k = 0; k < rows.length; k += 500) {
           const { error } = await db.from("places").upsert(rows.slice(k, k + 500), { onConflict: "id" });
           if (error) throw new Error("base : " + error.message);
@@ -100,7 +103,7 @@ Deno.serve(async (req) => {
         fait.push({ tuile: i, lieux: rows.length });
       } catch (e) { echecs.push({ tuile: i, erreur: String((e as Error).message ?? e) }); }
     }
-    return { fait, echecs, next: Math.min(from + count, tiles.length) };
+    return { fait, echecs, next: i };
   }
 
   if (!auto) {

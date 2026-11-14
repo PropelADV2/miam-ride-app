@@ -26,7 +26,7 @@ Si elle diffère de la valeur par défaut : `supabase secrets set PRIM_BASE=<adr
 
 ## Base des boulangeries (`places`) : fonction `sync-places`
 Charge les boulangeries d'OpenStreetMap dans Supabase pour que l'appli n'interroge plus Overpass (lent, souvent saturé).
-Zone : Île-de-France + ~50 km de marge (lat 47,65–49,70 ; lng 0,85–4,20), découpée en 90 tuiles de ~28 × 26 km.
+Zone : Île-de-France + ~50 km de marge (lat 47,65–49,70 ; lng 0,85–4,20), découpée en 340 tuiles de ~14 × 13 km.
 
 ### Mise en place (une fois)
 1. **Table et fonctions** : Supabase › SQL Editor › New query, coller le contenu de `sql/places.sql`, Run.
@@ -34,7 +34,7 @@ Zone : Île-de-France + ~50 km de marge (lat 47,65–49,70 ; lng 0,85–4,20), d
 3. **Déployer** : `supabase functions deploy sync-places`
 4. **Charger** (environ 10 à 20 minutes, à relancer au besoin) :
    `URL=https://<réf>.supabase.co ANON=<clé anon> SYNC=<SYNC_KEY> ./charger-places.sh`
-   Le script traite 3 tuiles par appel, affiche chaque réponse et nettoie à la fin les lieux disparus d'OpenStreetMap.
+   Le script traite 1 à 3 tuiles par appel, affiche chaque réponse et nettoie à la fin les lieux disparus d'OpenStreetMap.
    Si une tuile échoue (Overpass saturé), relance simplement le script : les lieux déjà chargés restent.
 5. **Vérifier** : Supabase › Table Editor › `places` (≈ 12 000 à 15 000 lignes) ; dans le SQL Editor :
    `select * from places_near(48.8049, 2.1204, 3000);` doit renvoyer les boulangeries autour de Versailles.
